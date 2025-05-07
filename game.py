@@ -26,7 +26,7 @@ class Game:
 
             self.screen.fill(self._background_color)
 
-            self.coin.display(self.screen)
+            self.coin.draw(self.screen)
 
             pg.display.flip()
 
