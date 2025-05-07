@@ -1,8 +1,6 @@
-from assets import Element
+from assets.Element import Element
 import pygame as pg
-import game
-
 
 class Coin(Element):
     def __init__(self, x:int, y:int):
-        self.super(x,y,10,10,pg.Color(255,255,0))
+        super().__init__(x, y, 10, 10, pg.Color(255,255,0))

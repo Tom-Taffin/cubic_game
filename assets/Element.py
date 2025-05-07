@@ -23,3 +23,6 @@ class Element:
     
     def get_color(self) -> pg.Color:
         return self._color
+    
+    def display(self, screen : pg.display):
+        pg.draw.rect(screen, self._color, (self._x, self._y, self._length, self._width))
