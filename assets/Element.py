@@ -1,19 +1,13 @@
 import pygame as pg
 
-from game import Game
-
 class Element:
 
-    def __init__(self, game : Game,  x : int, y : int, length : int, width : int, color : pg.Color):
-        self._game = game
+    def __init__(self, x : int, y : int, length : int, width : int, color : pg.Color):
         self._x = x
         self._y = y
         self._length = length
         self._width = width
         self._color = color
-
-    def get_game(self) -> int:
-        return self._game
     
     def get_x(self) -> int:
         return self._x
