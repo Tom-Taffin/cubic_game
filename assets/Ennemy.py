@@ -6,7 +6,7 @@ from assets.Entity import Entity
 
 class Enemy(Entity):
     def __init__(self, x:int, y:int, deltaX:int, deltaY:int):
-        super().__init__(x,y,15,15,pg.Color(255,0,0),deltaX,deltaY)
+        super().__init__(x,y,30,30,pg.Color(255,0,0),deltaX,deltaY)
     
     def move(self, board_length:int, board_width:int):
         super().move(board_length,board_width)
