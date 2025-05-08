@@ -2,6 +2,7 @@ import pygame as pg
 import random as rd
 
 from assets.Coin import Coin
+from assets.Player import Player
 
 class Game:
 
@@ -15,6 +16,7 @@ class Game:
         self.clock = pg.time.Clock()
         self.running = True
 
+        self.player = Player(10, 10)
         self.coins = []
         self.add_random_coins(3)
     
@@ -34,6 +36,9 @@ class Game:
 
             for coin in self.coins:
                 coin.draw(self.screen)
+            
+            self.player.update(self._length, self._width)
+            self.player.draw(self.screen)
 
             pg.display.flip()
 
