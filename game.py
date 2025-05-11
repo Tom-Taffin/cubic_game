@@ -1,8 +1,9 @@
 import pygame as pg
 import random as rd
 
-from assets.Coin import Coin
 from assets.Player import Player
+from assets.Coin import Coin
+from assets.Ennemy import Ennemy
 
 class Game:
 
@@ -17,12 +18,20 @@ class Game:
         self.running = True
 
         self.player = Player(10, 10)
+        
         self.coins = []
         self.add_random_coins(3)
+
+        self.ennemies = []
+        self.add_random_ennemies(3)
     
     def add_random_coins(self, n:int):
         for _ in range(n):
             self.coins.append(Coin(rd.randrange(self._length), rd.randrange(self._width)))
+    
+    def add_random_ennemies(self, n:int):
+        for _ in range(n):
+            self.ennemies.append(Ennemy(rd.randrange(self._length), rd.randrange(self._width), rd.randrange(-2, 2), rd.randrange(-2, 2)))
     
     def play(self):
 
@@ -36,6 +45,10 @@ class Game:
 
             for coin in self.coins:
                 coin.draw(self.screen)
+            
+            for ennemy in self.ennemies:
+                ennemy.move(self._length, self._width)
+                ennemy.draw(self.screen)
             
             self.player.update(self._length, self._width)
             self.player.draw(self.screen)
