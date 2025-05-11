@@ -31,7 +31,7 @@ class Game:
     
     def add_random_ennemies(self, n:int):
         for _ in range(n):
-            self.ennemies.append(Ennemy(rd.randrange(self._length), rd.randrange(self._width), rd.randrange(-2, 2), rd.randrange(-2, 2)))
+            self.ennemies.append(Ennemy(rd.randrange(self._length), rd.randrange(self._width), rd.random()*3, rd.random()*3))
     
     def play(self):
 
@@ -44,11 +44,19 @@ class Game:
             self.screen.fill(self._background_color)
 
             for coin in self.coins:
-                coin.draw(self.screen)
+                if pg.Rect(coin.get_x(),coin.get_y(),coin.get_length(),coin.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
+                    self.coins.remove(coin)
+                else:
+                    coin.draw(self.screen)
             
             for ennemy in self.ennemies:
-                ennemy.move(self._length, self._width)
-                ennemy.draw(self.screen)
+                if pg.Rect(ennemy.get_x(),ennemy.get_y(),ennemy.get_length(),ennemy.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
+                    self.game_over()
+                    self.running = False
+
+                else:
+                    ennemy.move(self._length, self._width)
+                    ennemy.draw(self.screen)
             
             self.player.update(self._length, self._width)
             self.player.draw(self.screen)
@@ -56,8 +64,12 @@ class Game:
             pg.display.flip()
 
             self.clock.tick(60)
-
+            
         pg.quit()
+
+    def game_over(self):
+        image = pg.image.load("images/game_over.png")
+        self.screen.blit(image, pg.Rect(300,200,400,400))
 
 
 if __name__ == '__main__':
