@@ -33,3 +33,16 @@ class Player(Entity):
         if keys[pg.K_d] or keys[pg.K_RIGHT]:
             self._deltaX = PLAYER_SPEED
         self.move(board_length, board_width)
+    
+    def step(self, action:int, board_length:int, board_width:int):
+        self._deltaX = 0
+        self._deltaY = 0
+        if action == 1:
+            self._deltaY = -PLAYER_SPEED
+        if action == 2:
+            self._deltaX = PLAYER_SPEED
+        if action == 3:
+            self._deltaY = PLAYER_SPEED
+        if action == 4:
+            self._deltaX = -PLAYER_SPEED
+        self.move(board_length, board_width)
