@@ -4,6 +4,7 @@ import random as rd
 
 from assets.Player import Player
 from assets.Level_random import Level_random
+from assets.Level1 import Level1
 
 LENGTH = 800
 WITDH = 600
@@ -46,9 +47,8 @@ class Game:
         for ennemy in self.level.ennemies:
             ennemy.move(self._length, self._width)
             if pg.Rect(ennemy.get_x(),ennemy.get_y(),ennemy.get_length(),ennemy.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
-                self.score -= 10
-                done = True
-                break
+                self.score -= 100
+                return done
         
         has_coin_active = False
         for coin in self.level.coins:
@@ -105,7 +105,7 @@ class Game:
                     self.screen.blit(image, pg.Rect(300,200,400,400))
                     pg.display.flip()
                     time.sleep(2)
-                    self.level = Level_random(LENGTH,WITDH)
+                    self.level = Level1(LENGTH,WITDH)
                     self.player = Player(self.level.entry.get_x(),self.level.entry.get_y())
                     pass
 
@@ -138,5 +138,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(Level_random(LENGTH,WITDH))
-    game.play()
+    game = Game(Level1(LENGTH,WITDH))
+    game.playGUI()
