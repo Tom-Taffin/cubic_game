@@ -44,10 +44,11 @@ class Game:
                 if pg.Rect(ennemy.get_x(),ennemy.get_y(),ennemy.get_length(),ennemy.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
                     image = pg.image.load("images/game_over.png")
                     self.screen.blit(image, pg.Rect(300,200,400,400))
-                    self.running = False
                     pg.display.flip()
                     time.sleep(2)
-                    break
+                    self.level = Level_random(LENGTH,WITDH)
+                    self.player = Player(self.level.entry.get_x(),self.level.entry.get_y())
+                    pass
 
                 else:
                     ennemy.move(self._length, self._width)
