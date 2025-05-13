@@ -26,6 +26,7 @@ class Game:
 
 
     def state(self):
+        """return the state vector with the coordinates of the player, coins, enemies and exit"""
         res = []
         res.append(self.player.get_x())
         res.append(self.player.get_y())
@@ -38,11 +39,11 @@ class Game:
             res.append(ennemy.get_y())
         return res
     
-    def step(self, action, length, width):
+    def step(self, action:int, width:int, height:int):
         self.score -= 0.001
         reward = -0.001
 
-        self.player.step(action, length, width)
+        self.player.step(action, width, height)
 
         self.screen.fill(self._background_color)
         self.level.entry.draw(self.screen)
@@ -91,10 +92,6 @@ class Game:
             print(self.score)
             print(done)
 
-
-    # jeu classique
-
-
     def initScreen(self):
         pg.init()
         self.screen = pg.display.set_mode((self._width, self._height))
@@ -106,6 +103,8 @@ class Game:
         self.level = Level0(WIDTH,HEIGHT)
         self.player = Player(self.level.entry.get_x(),self.level.entry.get_y())
         self.score = 0
+
+    # jeu classique
     
     def playGUI(self):
 
@@ -137,7 +136,7 @@ class Game:
             for ennemy in self.level.ennemies:
                 if ennemy.get_rect().colliderect(self.player.get_rect()):
                     image = pg.image.load("images/game_over.png")
-                    self.screen.blit(image, pg.Rect(300,200,400,400))
+                    self.screen.blit(image, (300,200))
                     pg.display.flip()
                     time.sleep(2)
                     self.level = Level0(WIDTH,HEIGHT)
@@ -156,7 +155,7 @@ class Game:
             
             if not has_coin_active and self.level.exit.get_rect().colliderect(self.player.get_rect()):
                 image = pg.image.load("images/win.jpg")
-                self.screen.blit(image, pg.Rect(300,200,400,400))
+                self.screen.blit(image, (300,200))
                 self.running = False
                 pg.display.flip()
                 time.sleep(2)
