@@ -11,8 +11,8 @@ class Level0(Level):
         ennemies = []
         for i in range(60,width-30, 120):
             if i%240==0:
-                ennemies.append(Ennemy(i,height,0,7))
+                ennemies.append(Ennemy(i,height,0,3))
             else:
-                ennemies.append(Ennemy(i,0,0,7))
+                ennemies.append(Ennemy(i,0,0,3))
 
         super().__init__(coins, ennemies, Area(0,0,False), Area(width-40, height-40,True), width, height)

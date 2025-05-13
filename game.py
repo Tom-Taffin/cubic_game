@@ -37,9 +37,13 @@ class Game:
         for ennemy in self.level.ennemies:
             res.append(ennemy.get_x())
             res.append(ennemy.get_y())
+        res.append(self.level.exit.get_x())
+        res.append(self.level.exit.get_y())
         return res
     
     def step(self, action:int, width:int, height:int):
+        if self.score < -100:
+            return -100, 1
         self.score -= 0.001
         reward = -0.001
 
@@ -50,16 +54,16 @@ class Game:
         self.level.exit.draw(self.screen)
 
         for coin in self.level.coins:
-            if coin.is_active == 1 and pg.Rect(coin.get_x(),coin.get_y(),coin.get_length(),coin.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
+            if coin.is_active == 1 and coin.get_rect().colliderect(self.player.get_rect()):
                 coin.is_active = 0
-                self.score += 10
-                reward += 10
+                self.score += 20
+                reward += 20
             else:
                 coin.draw(self.screen)
         
         for ennemy in self.level.ennemies:
             ennemy.move(self._width, self._height)
-            if pg.Rect(ennemy.get_x(),ennemy.get_y(),ennemy.get_length(),ennemy.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
+            if ennemy.get_rect().colliderect(self.player.get_rect()):
                 self.score -= 10
                 reward -= 10
                 return reward, 1
@@ -72,10 +76,14 @@ class Game:
                 has_coin_active = True
                 break
         
-        if not has_coin_active and pg.Rect(self.level.exit.get_x(),self.level.exit.get_y(),self.level.exit.get_length(),self.level.exit.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
-            self.score += 100
-            reward += 100
-            return reward, 1
+        if self.level.exit.get_rect().colliderect(self.player.get_rect()):
+            if not has_coin_active :
+                self.score += 100
+                reward += 100
+                return reward, 1
+            else :
+                self.score -= 0.01
+                reward -= 0.01
         
         self.player.draw(self.screen)
 

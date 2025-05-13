@@ -8,10 +8,10 @@ WIDTH = 600
 # Initialiser l'agent
 jeu = Game(Level0(LENGTH, WIDTH))
 jeu.initScreen()
-agent = DQNAgent(state_dim=23, action_dim=5, batch_size=64)
+agent = DQNAgent(state_dim=25, action_dim=5, batch_size=64)
 
 # Nombre d'épisodes d'entraînement
-n_episodes = 1000
+n_episodes = 5000
 
 
 
@@ -20,11 +20,18 @@ for episode in range(n_episodes):
     state = jeu.state()  # Récupérer l'état initial
     done = False
     total_reward = 0
+    if episode == n_episodes-1:
+        f = open("last.txt", "w")
+        f.write(str(state) +"\n")
 
     while not done:
         action = agent.select_action(state)  # Sélectionner une action selon la politique ε-greedy
         reward, done = jeu.step(action, LENGTH, WIDTH)  # Appliquer l'action et obtenir le nouvel état et la récompense
         next_state = jeu.state()
+
+        if episode == n_episodes-1:
+            f.write(str(next_state) + "\n")
+
         # Ajouter la transition dans le buffer de replay
         agent.store(state, action, reward, next_state, done)
         
@@ -34,5 +41,8 @@ for episode in range(n_episodes):
         # Passer à l'état suivant
         state = next_state
         total_reward += reward
+    
+    if episode == n_episodes-1:
+            f.close()
 
     print(f"Episode {episode + 1}/{n_episodes}, Score: {jeu.score}, Total Reward: {total_reward}")
