@@ -5,14 +5,14 @@ from assets.Level import Level
 
 class Level0(Level):
 
-    def __init__(self, length, width):
+    def __init__(self, width:int, height:int):
     
-        coins = [Coin(20, width-40), Coin(length-40, 20), Coin(length//2,width//2)]
+        coins = [Coin(20, height-40), Coin(width-40, 20), Coin(width//2,height//2)]
         ennemies = []
-        for i in range(60,length-30, 120):
+        for i in range(60,width-30, 120):
             if i%240==0:
-                ennemies.append(Ennemy(i,width,0,7))
+                ennemies.append(Ennemy(i,height,0,7))
             else:
                 ennemies.append(Ennemy(i,0,0,7))
 
-        super().__init__(coins, ennemies, Area(0,0,False), Area(length-40, width-40,True), length, width)
+        super().__init__(coins, ennemies, Area(0,0,False), Area(width-40, height-40,True), width, height)

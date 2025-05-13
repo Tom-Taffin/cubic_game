@@ -9,18 +9,18 @@ class Player(Entity):
     def __init__(self, x:int, y:int):
         super().__init__(x,y,30,30,pg.Color(255,255,255), 0, 0)
     
-    def move(self, board_length:int, board_width:int):
-        super().move(board_length,board_width)
-        if self._x < 0:
-            self._x = 0
-        if self._y < 0:
-            self._y = 0
-        if self._x > board_length - self._length:
-            self._x = board_length - self._length
-        if self._y > board_width - self._width:
-            self._y = board_width - self._width
+    def move(self, board_width:int, board_height:int):
+        super().move(board_width,board_height)
+        if self.get_x() < 0:
+            self._rect.x = 0
+        if self.get_y() < 0:
+            self._rect.y = 0
+        if self.get_x() > board_width - self.get_width():
+            self._rect.x = board_width - self.get_width()
+        if self.get_y() > board_height - self.get_height():
+            self._rect.y = board_height - self.get_height()
     
-    def update(self, board_length:int, board_width:int):
+    def update(self, board_width:int, board_height:int):
         self._deltaX = 0
         self._deltaY = 0
         keys = pg.key.get_pressed()
@@ -32,9 +32,9 @@ class Player(Entity):
             self._deltaX = -PLAYER_SPEED
         if keys[pg.K_d] or keys[pg.K_RIGHT]:
             self._deltaX = PLAYER_SPEED
-        self.move(board_length, board_width)
+        self.move(board_width, board_height)
     
-    def step(self, action:int, board_length:int, board_width:int):
+    def step(self, action:int, board_width:int, board_height:int):
         self._deltaX = 0
         self._deltaY = 0
         if action == 1:
@@ -45,4 +45,4 @@ class Player(Entity):
             self._deltaY = PLAYER_SPEED
         if action == 4:
             self._deltaX = -PLAYER_SPEED
-        self.move(board_length, board_width)
+        self.move(board_width, board_height)

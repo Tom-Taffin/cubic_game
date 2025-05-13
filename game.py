@@ -6,20 +6,25 @@ from assets.Player import Player
 from assets.Level_random import Level_random
 from assets.Level1 import Level1
 from assets.Level0 import Level0
+from assets.Level import Level
 
-LENGTH = 800
-WITDH = 600
+WIDTH = 800
+HEIGHT = 600
 
 class Game:
 
-    def __init__(self, level):
-        self._length = LENGTH
-        self._width = WITDH
-        
+    def __init__(self, level:Level):
+        self._width = WIDTH
+        self._height = HEIGHT
         self.level = level
         self.player = Player(level.entry.get_x(),level.entry.get_y())
+        
+        # apprentissage supervisé
         self.score = 0
     
+    # apprentissage supervisé
+
+
     def state(self):
         res = []
         res.append(self.player.get_x())
@@ -52,7 +57,7 @@ class Game:
                 coin.draw(self.screen)
         
         for ennemy in self.level.ennemies:
-            ennemy.move(self._length, self._width)
+            ennemy.move(self._width, self._height)
             if pg.Rect(ennemy.get_x(),ennemy.get_y(),ennemy.get_length(),ennemy.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
                 self.score -= 10
                 reward -= 10
@@ -81,20 +86,24 @@ class Game:
         for i in range(100):
             action = rd.randrange(5)
             print(action)
-            done = self.step(action, self._length, self._width)
+            done = self.step(action, self._width, self._height)
             print(self.state())
             print(self.score)
             print(done)
 
+
+    # jeu classique
+
+
     def initScreen(self):
         pg.init()
-        self.screen = pg.display.set_mode((self._length, self._width))
+        self.screen = pg.display.set_mode((self._width, self._height))
         self.clock = pg.time.Clock()
         self.running = True
         self._background_color = pg.Color(0, 0, 0)
     
     def initGame(self):
-        self.level = Level0(LENGTH,WITDH)
+        self.level = Level0(WIDTH,HEIGHT)
         self.player = Player(self.level.entry.get_x(),self.level.entry.get_y())
         self.score = 0
     
@@ -103,7 +112,7 @@ class Game:
         self._background_color = pg.Color(0, 0, 0)
 
         pg.init()
-        self.screen = pg.display.set_mode((self._length, self._width))
+        self.screen = pg.display.set_mode((self._width, self._height))
         self.clock = pg.time.Clock()
         self.running = True
 
@@ -120,23 +129,23 @@ class Game:
 
             for coin in self.level.coins:
                 if coin.is_active == 1:
-                    if pg.Rect(coin.get_x(),coin.get_y(),coin.get_length(),coin.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
+                    if coin.get_rect().colliderect(self.player.get_rect()):
                         coin.is_active = 0
                     else:
                         coin.draw(self.screen)
             
             for ennemy in self.level.ennemies:
-                if pg.Rect(ennemy.get_x(),ennemy.get_y(),ennemy.get_length(),ennemy.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
+                if ennemy.get_rect().colliderect(self.player.get_rect()):
                     image = pg.image.load("images/game_over.png")
                     self.screen.blit(image, pg.Rect(300,200,400,400))
                     pg.display.flip()
                     time.sleep(2)
-                    self.level = Level0(LENGTH,WITDH)
+                    self.level = Level0(WIDTH,HEIGHT)
                     self.player = Player(self.level.entry.get_x(),self.level.entry.get_y())
                     pass
 
                 else:
-                    ennemy.move(self._length, self._width)
+                    ennemy.move(self._width, self._height)
                     ennemy.draw(self.screen)
             
             has_coin_active = False
@@ -145,7 +154,7 @@ class Game:
                     has_coin_active = True
                     break
             
-            if not has_coin_active and pg.Rect(self.level.exit.get_x(),self.level.exit.get_y(),self.level.exit.get_length(),self.level.exit.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
+            if not has_coin_active and self.level.exit.get_rect().colliderect(self.player.get_rect()):
                 image = pg.image.load("images/win.jpg")
                 self.screen.blit(image, pg.Rect(300,200,400,400))
                 self.running = False
@@ -153,7 +162,7 @@ class Game:
                 time.sleep(2)
                 break
 
-            self.player.update(self._length, self._width)
+            self.player.update(self._width, self._height)
             self.player.draw(self.screen)
 
             pg.display.flip()
@@ -164,5 +173,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(Level0(LENGTH,WITDH))
+    game = Game(Level0(WIDTH,HEIGHT))
     game.playGUI()

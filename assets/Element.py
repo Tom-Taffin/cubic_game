@@ -2,27 +2,27 @@ import pygame as pg
 
 class Element:
 
-    def __init__(self, x : int, y : int, length : int, width : int, color : pg.Color):
-        self._x = x
-        self._y = y
-        self._length = length
-        self._width = width
+    def __init__(self, x : int, y : int, width : int, height : int, color : pg.Color):
+        self._rect = pg.Rect(x,y,width,height)
         self._color = color
     
     def get_x(self) -> int:
-        return self._x
+        return self._rect.x
     
     def get_y(self) -> int:
-        return self._y
+        return self._rect.y
     
-    def get_length(self) -> int:
-        return self._length
+    def get_height(self) -> int:
+        return self._rect.height
     
     def get_width(self) -> int:
-        return self._width
+        return self._rect.width
+    
+    def get_rect(self) -> int:
+        return self._rect
     
     def get_color(self) -> pg.Color:
         return self._color
     
     def draw(self, screen : pg.display):
-        pg.draw.rect(screen, self._color, (self._x, self._y, self._length, self._width))
+        pg.draw.rect(screen, self._color, self._rect)
