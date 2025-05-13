@@ -5,6 +5,7 @@ import random as rd
 from assets.Player import Player
 from assets.Level_random import Level_random
 from assets.Level1 import Level1
+from assets.Level0 import Level0
 
 LENGTH = 800
 WITDH = 600
@@ -33,22 +34,31 @@ class Game:
         return res
     
     def step(self, action, length, width):
-        self.score -= 0.01
+        self.score -= 0.001
+        reward = -0.001
 
         self.player.step(action, length, width)
 
-        done = False
+        self.screen.fill(self._background_color)
+        self.level.entry.draw(self.screen)
+        self.level.exit.draw(self.screen)
 
         for coin in self.level.coins:
             if coin.is_active == 1 and pg.Rect(coin.get_x(),coin.get_y(),coin.get_length(),coin.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
                 coin.is_active = 0
                 self.score += 10
+                reward += 10
+            else:
+                coin.draw(self.screen)
         
         for ennemy in self.level.ennemies:
             ennemy.move(self._length, self._width)
             if pg.Rect(ennemy.get_x(),ennemy.get_y(),ennemy.get_length(),ennemy.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
-                self.score -= 100
-                return done
+                self.score -= 10
+                reward -= 10
+                return reward, 1
+            else:
+                ennemy.draw(self.screen)
         
         has_coin_active = False
         for coin in self.level.coins:
@@ -58,9 +68,14 @@ class Game:
         
         if not has_coin_active and pg.Rect(self.level.exit.get_x(),self.level.exit.get_y(),self.level.exit.get_length(),self.level.exit.get_width()).colliderect(pg.Rect(self.player.get_x(),self.player.get_y(),self.player.get_length(),self.player.get_width())):
             self.score += 100
-            done = True
+            reward += 100
+            return reward, 1
+        
+        self.player.draw(self.screen)
 
-        return done
+        pg.display.flip()
+
+        return reward, 0
 
     def play(self):
         for i in range(100):
@@ -71,6 +86,17 @@ class Game:
             print(self.score)
             print(done)
 
+    def initScreen(self):
+        pg.init()
+        self.screen = pg.display.set_mode((self._length, self._width))
+        self.clock = pg.time.Clock()
+        self.running = True
+        self._background_color = pg.Color(0, 0, 0)
+    
+    def initGame(self):
+        self.level = Level0(LENGTH,WITDH)
+        self.player = Player(self.level.entry.get_x(),self.level.entry.get_y())
+        self.score = 0
     
     def playGUI(self):
 
@@ -105,7 +131,7 @@ class Game:
                     self.screen.blit(image, pg.Rect(300,200,400,400))
                     pg.display.flip()
                     time.sleep(2)
-                    self.level = Level1(LENGTH,WITDH)
+                    self.level = Level0(LENGTH,WITDH)
                     self.player = Player(self.level.entry.get_x(),self.level.entry.get_y())
                     pass
 
@@ -138,5 +164,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(Level1(LENGTH,WITDH))
+    game = Game(Level0(LENGTH,WITDH))
     game.playGUI()
