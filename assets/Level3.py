@@ -1,0 +1,24 @@
+from assets.Coin import Coin
+from assets.Ennemy import Ennemy
+from assets.Area import Area
+from assets.Level import Level
+
+class Level3(Level):
+
+    def __init__(self, width:int, height:int):
+    
+        coins = [Coin(width//4,height//2), Coin(3*width//4,height//2), Coin(width//2,height//2)]
+        ennemies = []
+        for i in range(60,width-30, 60):
+            if i%120==0:
+                ennemies.append(Ennemy(i,height,0,5))
+            else:
+                ennemies.append(Ennemy(i,0,0,6))
+        
+        for i in range(200,height-30, 200):
+            if i%400==0:
+                ennemies.append(Ennemy(width,i,4,2))
+            else:
+                ennemies.append(Ennemy(0,i,4,2))
+
+        super().__init__(coins, ennemies, Area(0,0,False), Area(width-40, height-40,True), width, height)

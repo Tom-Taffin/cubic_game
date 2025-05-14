@@ -3,6 +3,7 @@ import time
 import random as rd
 
 from assets.Player import Player
+from assets.Level3 import Level3
 from assets.Level_random import Level_random
 from assets.Level1 import Level1
 from assets.Level0 import Level0
@@ -12,9 +13,11 @@ from assets.scenes.Menu import Menu
 from assets.scenes.Game_over import Game_over
 from assets.scenes.Win import Win
 from assets.scenes.Final_win import Final_win
+from assets.scenes.Levels import Levels
 
 WIDTH = 800
 HEIGHT = 600
+LEVELS = [Level0(WIDTH,HEIGHT),Level1(WIDTH,HEIGHT),Level_random(WIDTH,HEIGHT),Level3(WIDTH,HEIGHT)]
 
 class Game:
 
@@ -123,7 +126,7 @@ class Game:
 
         self._background_color = pg.Color(0, 0, 0)
         self.scene = "menu"
-        self.levels = [Level0(WIDTH,HEIGHT),Level1(WIDTH,HEIGHT),Level_random(WIDTH,HEIGHT)]
+        self.levels = LEVELS
 
         pg.init()
         self.screen = pg.display.set_mode((self._width, self._height))
@@ -139,6 +142,9 @@ class Game:
 
             elif self.scene == "play":
                 self.play_one_image()
+
+            elif self.scene == "levels":
+                levels = Levels(self.screen)
             
             elif self.scene == "game_over":
                 game_over = Game_over(self.screen)
@@ -147,7 +153,7 @@ class Game:
                 win = Win(self.screen)
             
             elif self.scene == "final_win":
-                win = Final_win(self.screen)
+                final_win = Final_win(self.screen)
 
 
             for event in pg.event.get():
@@ -155,30 +161,44 @@ class Game:
                     self.running = False
                 
                 elif self.scene == "menu" and event.type == pg.MOUSEBUTTONDOWN:
-                    if menu.has_click_on_button(event.pos) == -1:
+                    i = menu.has_click_on_button(event.pos)
+                    if i == -1:
                         pass
-                    elif menu.has_click_on_button(event.pos) == 0:
+                    elif i == 0:
                         self.level = self.levels[0]
                         self.restore_game()
                         self.scene = "play"
-                    elif menu.has_click_on_button(event.pos) == 1:
-                        pass
-                    elif menu.has_click_on_button(event.pos) == 2:
+                    elif i == 1:
+                        self.scene = "levels"
+                    elif i == 2:
                         self.running = False
+
+                elif self.scene == "levels" and event.type == pg.MOUSEBUTTONDOWN:
+                    i = levels.has_click_on_button(event.pos)
+                    if i == -1:
+                        pass
+                    elif i == len(self.levels):
+                        self.scene = "menu"
+                    else:
+                        self.scene = "play"
+                        self.level = self.levels[i]
+                        self.restore_game()
                 
                 elif self.scene == "game_over" and event.type == pg.MOUSEBUTTONDOWN:
-                    if game_over.has_click_on_button(event.pos) == -1:
+                    i = game_over.has_click_on_button(event.pos)
+                    if i == -1:
                         pass
-                    elif game_over.has_click_on_button(event.pos) == 0:
+                    elif i == 0:
                         self.restore_game()
                         self.scene = "play"
-                    elif game_over.has_click_on_button(event.pos) == 1:
+                    elif i == 1:
                         self.scene = "menu"
                 
                 elif self.scene == "win" and event.type == pg.MOUSEBUTTONDOWN:
-                    if win.has_click_on_button(event.pos) == -1:
+                    i = win.has_click_on_button(event.pos)
+                    if i == -1:
                         pass
-                    elif win.has_click_on_button(event.pos) == 0:
+                    elif i == 0:
                         indice = self.levels.index(self.level)+1
                         if indice<len(self.levels):
                             self.level = self.levels[indice]
@@ -186,16 +206,17 @@ class Game:
                             self.scene = "play"
                         else:
                             self.scene = "final_win"
-                    elif win.has_click_on_button(event.pos) == 1:
+                    elif i == 1:
                         self.restore_game()
                         self.scene = "play"
-                    elif win.has_click_on_button(event.pos) == 2:
+                    elif i == 2:
                         self.scene = "menu"
                 
                 elif self.scene == "final_win" and event.type == pg.MOUSEBUTTONDOWN:
-                    if win.has_click_on_button(event.pos) == -1:
+                    i = final_win.has_click_on_button(event.pos)
+                    if i == -1:
                         pass
-                    elif win.has_click_on_button(event.pos) == 0:
+                    elif i == 0:
                         self.scene = "menu"
 
             pg.display.flip()
