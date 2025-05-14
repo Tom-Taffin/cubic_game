@@ -146,6 +146,9 @@ class Game:
                 start_button_rect = banner.get_rect()
                 start_button_rect.x = banner_rect.x + banner_rect.width//3
                 start_button_rect.y = banner_rect.bottom+10
+                start_button_rect.x = banner_rect.x + banner_rect.width//3
+                start_button_rect.width = banner_rect.width//3
+                start_button_rect.height = banner_rect.height//2
                 self.screen.blit(start_button, start_button_rect)
 
             for event in pg.event.get():
