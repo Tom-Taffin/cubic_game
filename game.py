@@ -8,6 +8,9 @@ from assets.Level1 import Level1
 from assets.Level0 import Level0
 from assets.Level import Level
 
+from assets.scenes.Menu import Menu
+from assets.scenes.Game_over import Game_over
+
 WIDTH = 800
 HEIGHT = 600
 
@@ -117,7 +120,7 @@ class Game:
     def playGUI(self):
 
         self._background_color = pg.Color(0, 0, 0)
-        self.is_playing = False
+        self.scene = "menu"
 
         pg.init()
         self.screen = pg.display.set_mode((self._width, self._height))
@@ -128,42 +131,40 @@ class Game:
             
             self.screen.fill(self._background_color)
 
-            if game.is_playing:
-                self.update_area()
-                self.update_player()
-                self.update_coins()
-                self.update_ennemies_and_defeat()
-                self.update_win()
-            else:
-                banner = pg.image.load("images/banner.jpg")
-                banner = pg.transform.scale(banner,(self._width//2,self._height//6))
-                banner_rect = banner.get_rect()
-                banner_rect.x = self._width//4
-                banner_rect.y = self._height//4
-                self.screen.blit(banner, banner_rect)
-                start_button = pg.image.load("images/start.jpg")
-                start_button = pg.transform.scale(start_button,(banner_rect.width//3,banner_rect.height//2))
-                start_button_rect = banner.get_rect()
-                start_button_rect.x = banner_rect.x + banner_rect.width//3
-                start_button_rect.y = banner_rect.bottom+10
-                start_button_rect.x = banner_rect.x + banner_rect.width//3
-                start_button_rect.width = banner_rect.width//3
-                start_button_rect.height = banner_rect.height//2
-                self.screen.blit(start_button, start_button_rect)
+            if self.scene == "menu":
+                menu = Menu(self.screen)
+            
+            elif self.scene == "game_over":
+                game_over = Game_over(self.screen)
+            
+            elif self.scene == "play":
+                self.play_one_image()
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.running = False
                 
-                elif not game.is_playing and event.type == pg.MOUSEBUTTONDOWN:
-                    if start_button_rect.collidepoint(event.pos):
-                        game.is_playing = True
+                elif self.scene == "menu" and event.type == pg.MOUSEBUTTONDOWN:
+                    if menu.has_click_on_first_button(event.pos):
+                        self.scene = "play"
+                
+                elif self.scene == "game_over" and event.type == pg.MOUSEBUTTONDOWN:
+                    if game_over.has_click_on_first_button(event.pos):
+                        self.restore_game()
+                        self.scene = "play"
 
             pg.display.flip()
 
             self.clock.tick(60)
         
         pg.quit()
+    
+    def play_one_image(self):
+        self.update_area()
+        self.update_player()
+        self.update_coins()
+        self.update_win()
+        self.update_ennemies_and_defeat()
 
     def update_coins(self):
         for coin in self.level.coins:
@@ -176,11 +177,7 @@ class Game:
     def update_ennemies_and_defeat(self):
         for ennemy in self.level.ennemies:
             if ennemy.get_rect().colliderect(self.player.get_rect()):
-                image = pg.image.load("images/game_over.png")
-                self.screen.blit(image, (300,200))
-                pg.display.flip()
-                time.sleep(2)
-                self.restore_game()
+                self.scene = "game_over"
                 break
 
             else:
