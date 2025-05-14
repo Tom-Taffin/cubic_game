@@ -126,18 +126,35 @@ class Game:
 
         while self.running:
             
+            self.screen.fill(self._background_color)
+
+            if game.is_playing:
+                self.update_area()
+                self.update_player()
+                self.update_coins()
+                self.update_ennemies_and_defeat()
+                self.update_win()
+            else:
+                banner = pg.image.load("images/banner.jpg")
+                banner = pg.transform.scale(banner,(self._width//2,self._height//6))
+                banner_rect = banner.get_rect()
+                banner_rect.x = self._width//4
+                banner_rect.y = self._height//4
+                self.screen.blit(banner, banner_rect)
+                start_button = pg.image.load("images/start.jpg")
+                start_button = pg.transform.scale(start_button,(banner_rect.width//3,banner_rect.height//2))
+                start_button_rect = banner.get_rect()
+                start_button_rect.x = banner_rect.x + banner_rect.width//3
+                start_button_rect.y = banner_rect.bottom+10
+                self.screen.blit(start_button, start_button_rect)
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.running = False
-
-            self.screen.fill(self._background_color)
-            
-            self.update_area()
-            self.update_player()
-            self.update_coins()
-            self.update_ennemies_and_defeat()
-
-            self.update_win()
+                
+                elif not game.is_playing and event.type == pg.MOUSEBUTTONDOWN:
+                    if start_button_rect.collidepoint(event.pos):
+                        game.is_playing = True
 
             pg.display.flip()
 
@@ -160,8 +177,7 @@ class Game:
                 self.screen.blit(image, (300,200))
                 pg.display.flip()
                 time.sleep(2)
-                self.level = Level0(WIDTH,HEIGHT)
-                self.player = Player(self.level.entry.get_x(),self.level.entry.get_y())
+                self.restore_game()
                 break
 
             else:
@@ -186,10 +202,14 @@ class Game:
         if not self.has_coin_active() and self.level.exit.get_rect().colliderect(self.player.get_rect()):
             image = pg.image.load("images/win.jpg")
             self.screen.blit(image, (300,200))
-            self.running = False
+            self.is_playing = False
             pg.display.flip()
             time.sleep(2)
+            self.restore_game()
 
+    def restore_game(self):
+        self.level.__init__(WIDTH,HEIGHT)
+        self.player = Player(self.level.entry.get_x(),self.level.entry.get_y())
 
 if __name__ == '__main__':
     game = Game(Level0(WIDTH,HEIGHT))
