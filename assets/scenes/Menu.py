@@ -1,4 +1,3 @@
-import pygame as pg
 from assets.scenes.Scene import Scene
 
 class Menu(Scene):

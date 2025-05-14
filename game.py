@@ -10,6 +10,7 @@ from assets.Level import Level
 
 from assets.scenes.Menu import Menu
 from assets.scenes.Game_over import Game_over
+from assets.scenes.Win import Win
 
 WIDTH = 800
 HEIGHT = 600
@@ -121,6 +122,7 @@ class Game:
 
         self._background_color = pg.Color(0, 0, 0)
         self.scene = "menu"
+        self.levels = [Level0(WIDTH,HEIGHT),Level1(WIDTH,HEIGHT),Level_random(WIDTH,HEIGHT)]
 
         pg.init()
         self.screen = pg.display.set_mode((self._width, self._height))
@@ -136,6 +138,9 @@ class Game:
             
             elif self.scene == "game_over":
                 game_over = Game_over(self.screen)
+
+            elif self.scene == "win":
+                win = Win(self.screen)
             
             elif self.scene == "play":
                 self.play_one_image()
@@ -148,6 +153,7 @@ class Game:
                     if menu.has_click_on_button(event.pos) == -1:
                         pass
                     elif menu.has_click_on_button(event.pos) == 0:
+                        self.level = self.levels[0]
                         self.restore_game()
                         self.scene = "play"
                     elif menu.has_click_on_button(event.pos) == 1:
@@ -162,6 +168,23 @@ class Game:
                         self.restore_game()
                         self.scene = "play"
                     elif game_over.has_click_on_button(event.pos) == 1:
+                        self.scene = "menu"
+                
+                elif self.scene == "win" and event.type == pg.MOUSEBUTTONDOWN:
+                    if win.has_click_on_button(event.pos) == -1:
+                        pass
+                    elif win.has_click_on_button(event.pos) == 0:
+                        indice = self.levels.index(self.level)+1
+                        if indice<len(self.levels):
+                            self.level = self.levels[indice]
+                            self.restore_game()
+                            self.scene = "play"
+                        else:
+                            self.scene = "final_win"
+                    elif win.has_click_on_button(event.pos) == 1:
+                        self.restore_game()
+                        self.scene = "play"
+                    elif win.has_click_on_button(event.pos) == 2:
                         self.scene = "menu"
 
             pg.display.flip()
@@ -211,12 +234,7 @@ class Game:
     
     def update_win(self):
         if not self.has_coin_active() and self.level.exit.get_rect().colliderect(self.player.get_rect()):
-            image = pg.image.load("images/win.jpg")
-            self.screen.blit(image, (300,200))
-            self.is_playing = False
-            pg.display.flip()
-            time.sleep(2)
-            self.restore_game()
+            self.scene = "win"
 
     def restore_game(self):
         self.level.__init__(WIDTH,HEIGHT)
