@@ -11,6 +11,7 @@ from assets.Level import Level
 from assets.scenes.Menu import Menu
 from assets.scenes.Game_over import Game_over
 from assets.scenes.Win import Win
+from assets.scenes.Final_win import Final_win
 
 WIDTH = 800
 HEIGHT = 600
@@ -135,6 +136,9 @@ class Game:
 
             if self.scene == "menu":
                 menu = Menu(self.screen)
+
+            elif self.scene == "play":
+                self.play_one_image()
             
             elif self.scene == "game_over":
                 game_over = Game_over(self.screen)
@@ -142,8 +146,9 @@ class Game:
             elif self.scene == "win":
                 win = Win(self.screen)
             
-            elif self.scene == "play":
-                self.play_one_image()
+            elif self.scene == "final_win":
+                win = Final_win(self.screen)
+
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -185,6 +190,12 @@ class Game:
                         self.restore_game()
                         self.scene = "play"
                     elif win.has_click_on_button(event.pos) == 2:
+                        self.scene = "menu"
+                
+                elif self.scene == "final_win" and event.type == pg.MOUSEBUTTONDOWN:
+                    if win.has_click_on_button(event.pos) == -1:
+                        pass
+                    elif win.has_click_on_button(event.pos) == 0:
                         self.scene = "menu"
 
             pg.display.flip()
