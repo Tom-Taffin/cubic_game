@@ -145,13 +145,24 @@ class Game:
                     self.running = False
                 
                 elif self.scene == "menu" and event.type == pg.MOUSEBUTTONDOWN:
-                    if menu.has_click_on_first_button(event.pos):
-                        self.scene = "play"
-                
-                elif self.scene == "game_over" and event.type == pg.MOUSEBUTTONDOWN:
-                    if game_over.has_click_on_first_button(event.pos):
+                    if menu.has_click_on_button(event.pos) == -1:
+                        pass
+                    elif menu.has_click_on_button(event.pos) == 0:
                         self.restore_game()
                         self.scene = "play"
+                    elif menu.has_click_on_button(event.pos) == 1:
+                        pass
+                    elif menu.has_click_on_button(event.pos) == 2:
+                        self.running = False
+                
+                elif self.scene == "game_over" and event.type == pg.MOUSEBUTTONDOWN:
+                    if game_over.has_click_on_button(event.pos) == -1:
+                        pass
+                    elif game_over.has_click_on_button(event.pos) == 0:
+                        self.restore_game()
+                        self.scene = "play"
+                    elif game_over.has_click_on_button(event.pos) == 1:
+                        self.scene = "menu"
 
             pg.display.flip()
 
