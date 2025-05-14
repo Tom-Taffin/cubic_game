@@ -117,6 +117,7 @@ class Game:
     def playGUI(self):
 
         self._background_color = pg.Color(0, 0, 0)
+        self.is_playing = False
 
         pg.init()
         self.screen = pg.display.set_mode((self._width, self._height))
@@ -130,53 +131,64 @@ class Game:
                     self.running = False
 
             self.screen.fill(self._background_color)
-
-            self.level.entry.draw(self.screen)
-            self.level.exit.draw(self.screen)
-
-            for coin in self.level.coins:
-                if coin.is_active == 1:
-                    if coin.get_rect().colliderect(self.player.get_rect()):
-                        coin.is_active = 0
-                    else:
-                        coin.draw(self.screen)
             
-            for ennemy in self.level.ennemies:
-                if ennemy.get_rect().colliderect(self.player.get_rect()):
-                    image = pg.image.load("images/game_over.png")
-                    self.screen.blit(image, (300,200))
-                    pg.display.flip()
-                    time.sleep(2)
-                    self.level = Level0(WIDTH,HEIGHT)
-                    self.player = Player(self.level.entry.get_x(),self.level.entry.get_y())
-                    pass
+            self.update_area()
+            self.update_player()
+            self.update_coins()
+            self.update_ennemies_and_defeat()
 
-                else:
-                    ennemy.move(self._width, self._height)
-                    ennemy.draw(self.screen)
-            
-            has_coin_active = False
-            for coin in self.level.coins:
-                if coin.is_active == 1:
-                    has_coin_active = True
-                    break
-            
-            if not has_coin_active and self.level.exit.get_rect().colliderect(self.player.get_rect()):
-                image = pg.image.load("images/win.jpg")
-                self.screen.blit(image, (300,200))
-                self.running = False
-                pg.display.flip()
-                time.sleep(2)
-                break
-
-            self.player.update(self._width, self._height)
-            self.player.draw(self.screen)
+            self.update_win()
 
             pg.display.flip()
 
             self.clock.tick(60)
         
         pg.quit()
+
+    def update_coins(self):
+        for coin in self.level.coins:
+            if coin.is_active == 1:
+                if coin.get_rect().colliderect(self.player.get_rect()):
+                    coin.is_active = 0
+                else:
+                    coin.draw(self.screen)
+
+    def update_ennemies_and_defeat(self):
+        for ennemy in self.level.ennemies:
+            if ennemy.get_rect().colliderect(self.player.get_rect()):
+                image = pg.image.load("images/game_over.png")
+                self.screen.blit(image, (300,200))
+                pg.display.flip()
+                time.sleep(2)
+                self.level = Level0(WIDTH,HEIGHT)
+                self.player = Player(self.level.entry.get_x(),self.level.entry.get_y())
+                break
+
+            else:
+                ennemy.move(self._width, self._height)
+                ennemy.draw(self.screen)
+
+    def update_area(self):
+        self.level.entry.draw(self.screen)
+        self.level.exit.draw(self.screen)
+
+    def update_player(self):
+        self.player.update(self._width, self._height)
+        self.player.draw(self.screen)
+    
+    def has_coin_active(self):
+        for coin in self.level.coins:
+            if coin.is_active == 1:
+                return True
+        return False
+    
+    def update_win(self):
+        if not self.has_coin_active() and self.level.exit.get_rect().colliderect(self.player.get_rect()):
+            image = pg.image.load("images/win.jpg")
+            self.screen.blit(image, (300,200))
+            self.running = False
+            pg.display.flip()
+            time.sleep(2)
 
 
 if __name__ == '__main__':
