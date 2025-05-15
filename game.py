@@ -146,25 +146,23 @@ class Game:
                 if event.type == pg.QUIT:
                     self.running = False
                 
-                elif self.scene == "menu" and event.type == pg.MOUSEBUTTONDOWN:
+                elif self.scene == "menu":
                     scene = self.handle_buttons(scene,event,[self.handle_start_button,self.handle_levels_button,self.handle_quit_button])
 
-                elif self.scene == "levels" and event.type == pg.MOUSEBUTTONDOWN:
-                    i = scene.has_click_on_button(event.pos)
-                    if i == -1:
-                        pass
-                    elif i == len(self.levels):
-                        scene = self.handle_menu_button()
-                    else:
-                        scene = self.handle_start_button(i)
+                elif self.scene == "levels":
+                    list_handle_button = []
+                    for i in range(len(self.levels)):
+                        list_handle_button.append(lambda level_index=i: self.handle_start_button(level_index))
+                    list_handle_button.append(self.handle_menu_button)
+                    scene = self.handle_buttons(scene,event,list_handle_button)
                 
-                elif self.scene == "game_over" and event.type == pg.MOUSEBUTTONDOWN:
+                elif self.scene == "game_over":
                     scene = self.handle_buttons(scene,event,[self.handle_play_button,self.handle_menu_button])
                 
-                elif self.scene == "win" and event.type == pg.MOUSEBUTTONDOWN:
+                elif self.scene == "win":
                     scene = self.handle_buttons(scene,event,[self.handle_next_button,self.handle_play_button,self.handle_menu_button])
                 
-                elif self.scene == "final_win" and event.type == pg.MOUSEBUTTONDOWN:
+                elif self.scene == "final_win":
                     scene = self.handle_buttons(scene,event,[self.handle_menu_button])
 
             pg.display.flip()
@@ -200,7 +198,10 @@ class Game:
             if ennemy.get_rect().colliderect(self.player.get_rect()):
                 self.scene = "game_over"
                 self.screen.fill(self._background_color)
-                return Game_over(self.screen)
+                self.selected_button = 0
+                scene = Game_over(self.screen)
+                scene.select_button(self.selected_button)
+                return scene
 
             else:
                 ennemy.move(self._width, self._height)
@@ -224,7 +225,10 @@ class Game:
         if not self.has_coin_active() and self.level.exit.get_rect().colliderect(self.player.get_rect()):
             self.scene = "win"
             self.screen.fill(self._background_color)
-            return Win(self.screen)
+            self.selected_button = 0
+            scene = Win(self.screen)
+            scene.select_button(self.selected_button)
+            return scene
 
 
     # ------------------------------------------ some methods ----------------------------------------------------
@@ -235,10 +239,27 @@ class Game:
         self.player = Player(self.level.entry.get_x(),self.level.entry.get_y())
         
     def handle_buttons(self, scene, event, list_handle_button):
-        i = scene.has_click_on_button(event.pos)
+        i=-1
+        
+        if event.type == pg.MOUSEBUTTONDOWN:
+            i = scene.has_click_on_button(event.pos)
+        
+        elif event.type == pg.KEYDOWN:
+            if event.key == pg.K_DOWN:
+                scene.deselect_button(self.selected_button)
+                self.selected_button = (self.selected_button + 1) % len(scene.buttons_rect)
+                scene.select_button(self.selected_button)
+            if event.key == pg.K_UP:
+                scene.deselect_button(self.selected_button)
+                self.selected_button = (self.selected_button - 1) % len(scene.buttons_rect)
+                scene.select_button(self.selected_button)
+            if event.key == pg.K_RETURN:
+                i = self.selected_button
+        
         if i == -1:
             return scene
         return list_handle_button[i]()
+
     
     
     # ------------------------------------------ button behavior ----------------------------------------------------
@@ -246,12 +267,18 @@ class Game:
     def handle_menu_button(self):
         self.scene = "menu"
         self.screen.fill(self._background_color)
-        return Menu(self.screen)
+        self.selected_button = 0
+        scene = Menu(self.screen)
+        scene.select_button(self.selected_button)
+        return scene
     
     def handle_levels_button(self):
         self.scene = "levels"
         self.screen.fill(self._background_color)
-        return Levels(self.screen)
+        self.selected_button = 0
+        scene = Levels(self.screen)
+        scene.select_button(self.selected_button)
+        return scene
     
     def handle_play_button(self):
         self.restore_game()
@@ -275,7 +302,10 @@ class Game:
             self.scene = "final_win"
             self.screen.fill(self._background_color)
             self.selected_button = 0
-            return Final_win(self.screen)
+            scene = Final_win(self.screen)
+            scene.select_button(self.selected_button)
+            return scene
+
 
 if __name__ == '__main__':
     game = Game(Level0(WIDTH,HEIGHT))
