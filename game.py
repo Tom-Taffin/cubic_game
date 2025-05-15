@@ -1,5 +1,5 @@
 import pygame as pg
-import time
+from time import time
 import random as rd
 
 from assets.Player import Player
@@ -160,7 +160,7 @@ class Game:
                     scene = self.handle_buttons(scene,event,[self.handle_play_button,self.handle_menu_button])
                 
                 elif self.scene == "win":
-                    scene = self.handle_buttons(scene,event,[self.handle_next_button,self.handle_play_button,self.handle_menu_button])
+                    scene = self.handle_buttons(scene,event,[self.handle_next_button,self.handle_reset_button,self.handle_menu_button])
                 
                 elif self.scene == "final_win":
                     scene = self.handle_buttons(scene,event,[self.handle_menu_button])
@@ -199,8 +199,11 @@ class Game:
                 self.scene = "game_over"
                 self.screen.fill(self._background_color)
                 self.selected_button = 0
+                self.nb_dead += 1
                 scene = Game_over(self.screen)
                 scene.select_button(self.selected_button)
+                self.display_nb_deaths()
+                self.display_time()
                 return scene
 
             else:
@@ -228,6 +231,8 @@ class Game:
             self.selected_button = 0
             scene = Win(self.screen)
             scene.select_button(self.selected_button)
+            self.display_nb_deaths()
+            self.display_time()
             return scene
 
 
@@ -259,6 +264,16 @@ class Game:
         if i == -1:
             return scene
         return list_handle_button[i]()
+    
+    def display_nb_deaths(self):
+        font = pg.font.Font(None, 40)
+        text_deaths = font.render(f'number of deaths: {self.nb_dead}',1,(255,255,255))
+        self.screen.blit(text_deaths, (20, 300))
+
+    def display_time(self):
+        font = pg.font.Font(None, 40)
+        text_time = font.render(f'time: {round(time() - self.time_start, 2)}',1,(255,255,255))
+        self.screen.blit(text_time, (20, 350))
 
     
     
@@ -286,10 +301,16 @@ class Game:
         self.ready_duration = 60
         self.screen.fill(self._background_color)
         Ready(self.screen)
+        self.time_start = time()
 
     def handle_start_button(self, i = 0):
         self.level = self.levels[i]
         self.handle_play_button()
+        self.nb_dead = 0
+
+    def handle_reset_button(self):
+        self.handle_play_button()
+        self.nb_dead = 0
 
     def handle_quit_button(self):
         self.running = False
