@@ -2,6 +2,7 @@ import pygame as pg
 from time import time
 import random as rd
 
+from assets.Sound_manager import Sound_manager
 from assets.Player import Player
 from assets.Level4 import Level4
 from assets.Level3 import Level3
@@ -16,7 +17,6 @@ from assets.scenes.Win import Win
 from assets.scenes.Final_win import Final_win
 from assets.scenes.Levels import Levels
 from assets.scenes.Ready import Ready
-from assets.scenes.Animate_scene import Animate_scene
 
 WIDTH = 800
 HEIGHT = 600
@@ -129,6 +129,7 @@ class Game:
 
         self._background_color = pg.Color(0, 0, 0)
         self.levels = LEVELS
+        self.sound_manager = Sound_manager()
 
         pg.init()
         self.screen = pg.display.set_mode((self._width, self._height))
@@ -272,6 +273,7 @@ class Game:
         return list_handle_button[i]()
     
     def game_over(self):
+        self.sound_manager.play("game_over")
         self.scene = "game_over"
         self.screen.fill(self._background_color)
         self.selected_button = 0

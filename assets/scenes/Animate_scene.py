@@ -7,7 +7,7 @@ class Animate_scene(Scene):
         super().__init__(screen, width, height, banner_name)
         self.current_image = 0
         self.images = animations.get(background_name)
-        self.tick = 7
+        self.tick = 0
 
     def update(self, selected_button):
         if self.tick == 0:
