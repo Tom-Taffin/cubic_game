@@ -10,6 +10,7 @@ class Scene:
         self.banner_rect.y = screen.get_height()//6
         screen.blit(self.banner, self.banner_rect)
         self.buttons_rect = []
+        self.buttons_names = []
         self.buttons = []
         self.screen = screen
 
@@ -26,7 +27,8 @@ class Scene:
         button_rect.width = self.banner_rect.width//3
         button_rect.height = self.banner_rect.height//2
         self.screen.blit(button, button_rect)
-        self.buttons.append(button_name)
+        self.buttons_names.append(button_name)
+        self.buttons.append(button)
         self.buttons_rect.append(button_rect)
 
 
@@ -39,11 +41,11 @@ class Scene:
         return -1
     
     def select_button(self, i):
-        button = pg.image.load(self.buttons[i][:-4]+"_selected"+self.buttons[i][-4:])
+        button = pg.image.load(self.buttons_names[i][:-4]+"_selected"+self.buttons_names[i][-4:])
         button = pg.transform.scale(button,(self.banner_rect.width//3,self.banner_rect.height//2))
         self.screen.blit(button, self.buttons_rect[i])
 
     def deselect_button(self, i):
-        button = pg.image.load(self.buttons[i])
+        button = pg.image.load(self.buttons_names[i])
         button = pg.transform.scale(button,(self.banner_rect.width//3,self.banner_rect.height//2))
         self.screen.blit(button, self.buttons_rect[i])

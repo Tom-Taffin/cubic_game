@@ -16,6 +16,7 @@ from assets.scenes.Win import Win
 from assets.scenes.Final_win import Final_win
 from assets.scenes.Levels import Levels
 from assets.scenes.Ready import Ready
+from assets.scenes.Animate_scene import Animate_scene
 
 WIDTH = 800
 HEIGHT = 600
@@ -143,6 +144,9 @@ class Game:
                     self.ready_duration-=1
                 else:
                     scene = self.play_one_image()
+            
+            elif self.scene == "menu" or self.scene == "final_win":
+                scene.update(self.selected_button)
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -293,7 +297,6 @@ class Game:
 
     def handle_menu_button(self):
         self.scene = "menu"
-        self.screen.fill(self._background_color)
         self.selected_button = 0
         scene = Menu(self.screen)
         scene.select_button(self.selected_button)
@@ -333,7 +336,6 @@ class Game:
             self.handle_start_button(indice)
         else:
             self.scene = "final_win"
-            self.screen.fill(self._background_color)
             self.selected_button = 0
             scene = Final_win(self.screen)
             scene.select_button(self.selected_button)
