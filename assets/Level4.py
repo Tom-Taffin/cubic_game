@@ -4,7 +4,7 @@ from assets.Area import Area
 from assets.Level import Level
 from assets.Timer import Timer
 
-class Level3(Level):
+class Level4(Level):
 
     def __init__(self, width:int, height:int):
     
@@ -22,4 +22,4 @@ class Level3(Level):
             else:
                 ennemies.append(Ennemy(0,i,4,2))
 
-        super().__init__(coins, ennemies, Area(0,0,False), Area(width-40, height-40,True), width, height)
+        super().__init__(coins, ennemies, Area(0,0,False), Area(width-40, height-40,True), width, height, Timer(5))

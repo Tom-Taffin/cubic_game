@@ -3,6 +3,7 @@ from time import time
 import random as rd
 
 from assets.Player import Player
+from assets.Level4 import Level4
 from assets.Level3 import Level3
 from assets.Level_random import Level_random
 from assets.Level1 import Level1
@@ -18,7 +19,7 @@ from assets.scenes.Ready import Ready
 
 WIDTH = 800
 HEIGHT = 600
-LEVELS = [Level0(WIDTH,HEIGHT),Level1(WIDTH,HEIGHT),Level_random(WIDTH,HEIGHT),Level3(WIDTH,HEIGHT)]
+LEVELS = [Level0(WIDTH,HEIGHT),Level1(WIDTH,HEIGHT),Level_random(WIDTH,HEIGHT),Level3(WIDTH,HEIGHT),Level4(WIDTH,HEIGHT)]
 
 class Game:
 
@@ -130,6 +131,7 @@ class Game:
 
         pg.init()
         self.screen = pg.display.set_mode((self._width, self._height))
+        pg.display.set_caption("The hardest game")
         self.clock = pg.time.Clock()
         self.running = True
         scene = self.handle_menu_button()
@@ -177,6 +179,9 @@ class Game:
     def play_one_image(self):
         self.screen.fill(self._background_color)
         self.update_area()
+        scene = self.update_timer()
+        if scene:
+            return scene
         self.update_player()
         self.update_coins()
         scene = self.update_ennemies_and_defeat()
@@ -196,15 +201,7 @@ class Game:
     def update_ennemies_and_defeat(self):
         for ennemy in self.level.ennemies:
             if ennemy.get_rect().colliderect(self.player.get_rect()):
-                self.scene = "game_over"
-                self.screen.fill(self._background_color)
-                self.selected_button = 0
-                self.nb_dead += 1
-                scene = Game_over(self.screen)
-                scene.select_button(self.selected_button)
-                self.display_nb_deaths()
-                self.display_time()
-                return scene
+                return self.game_over()
 
             else:
                 ennemy.move(self._width, self._height)
@@ -234,7 +231,12 @@ class Game:
             self.display_nb_deaths()
             self.display_time()
             return scene
-
+        
+    def update_timer(self):
+        if self.level.timer:
+            self.level.timer.update_bar(self.screen)
+            if self.level.timer.is_finish():
+                return self.game_over()
 
     # ------------------------------------------ some methods ----------------------------------------------------
 
@@ -265,6 +267,17 @@ class Game:
             return scene
         return list_handle_button[i]()
     
+    def game_over(self):
+        self.scene = "game_over"
+        self.screen.fill(self._background_color)
+        self.selected_button = 0
+        self.nb_dead += 1
+        scene = Game_over(self.screen)
+        scene.select_button(self.selected_button)
+        self.display_nb_deaths()
+        self.display_time()
+        return scene
+    
     def display_nb_deaths(self):
         font = pg.font.Font(None, 40)
         text_deaths = font.render(f'number of deaths: {self.nb_dead}',1,(255,255,255))
@@ -272,9 +285,8 @@ class Game:
 
     def display_time(self):
         font = pg.font.Font(None, 40)
-        text_time = font.render(f'time: {round(time() - self.time_start, 2)}',1,(255,255,255))
+        text_time = font.render(f'time: {round(time() - self.time_start - 1, 2)}',1,(255,255,255))
         self.screen.blit(text_time, (20, 350))
-
     
     
     # ------------------------------------------ button behavior ----------------------------------------------------
