@@ -199,6 +199,7 @@ class Game:
         for coin in self.level.coins:
             if coin.is_active == 1:
                 if coin.get_rect().colliderect(self.player.get_rect()):
+                    self.sound_manager.playSound("coin")
                     coin.is_active = 0
                 else:
                     coin.draw(self.screen)
@@ -228,6 +229,8 @@ class Game:
     
     def update_win(self):
         if not self.has_coin_active() and self.level.exit.get_rect().colliderect(self.player.get_rect()):
+            self.sound_manager.stop_Music()
+            self.sound_manager.playSound("win")
             self.scene = "win"
             self.screen.fill(self._background_color)
             self.selected_button = 0
@@ -270,10 +273,15 @@ class Game:
         
         if i == -1:
             return scene
+        self.sound_manager.stop_all_sounds()
+        self.sound_manager.stop_Music()
+        self.sound_manager.playSound("button_click")
         return list_handle_button[i]()
     
     def game_over(self):
-        self.sound_manager.play("game_over")
+        self.sound_manager.stop_Music()
+        self.sound_manager.playSound("game_over")
+        self.sound_manager.playMusic("game_over_bg")
         self.scene = "game_over"
         self.screen.fill(self._background_color)
         self.selected_button = 0
@@ -298,6 +306,7 @@ class Game:
     # ------------------------------------------ button behavior ----------------------------------------------------
 
     def handle_menu_button(self):
+        self.sound_manager.playMusic("menu_bg")
         self.scene = "menu"
         self.selected_button = 0
         scene = Menu(self.screen)
@@ -314,6 +323,10 @@ class Game:
     
     def handle_play_button(self):
         self.restore_game()
+        if self.level.timer:
+            self.sound_manager.playMusic("timer_bg")
+        else:
+            self.sound_manager.playMusic("play_bg")
         self.scene = "play"
         self.ready_duration = 60
         self.screen.fill(self._background_color)
@@ -337,6 +350,7 @@ class Game:
         if indice<len(self.levels):
             self.handle_start_button(indice)
         else:
+            self.sound_manager.playSound("final_win")
             self.scene = "final_win"
             self.selected_button = 0
             scene = Final_win(self.screen)
