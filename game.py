@@ -10,6 +10,7 @@ from assets.Level_random import Level_random
 from assets.Level1 import Level1
 from assets.Level0 import Level0
 from assets.Level import Level
+from assets.Level2 import Level2
 
 from assets.scenes.Menu import Menu
 from assets.scenes.Game_over import Game_over
@@ -20,7 +21,7 @@ from assets.scenes.Ready import Ready
 
 WIDTH = 800
 HEIGHT = 600
-LEVELS = [Level0(WIDTH,HEIGHT),Level1(WIDTH,HEIGHT),Level_random(WIDTH,HEIGHT),Level3(WIDTH,HEIGHT),Level4(WIDTH,HEIGHT)]
+LEVELS = [Level0(WIDTH,HEIGHT), Level2(WIDTH,HEIGHT), Level1(WIDTH,HEIGHT),Level_random(WIDTH,HEIGHT),Level3(WIDTH,HEIGHT),Level4(WIDTH,HEIGHT)]
 
 class Game:
 

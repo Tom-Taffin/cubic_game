@@ -9,4 +9,5 @@ class Levels(Scene):
         super().add_button("images/level2.jpg")
         super().add_button("images/level3.jpg")
         super().add_button("images/level4.jpg")
+        super().add_button("images/level5.jpg")
         super().add_button("images/menu.jpg")
