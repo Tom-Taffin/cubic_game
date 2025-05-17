@@ -232,6 +232,7 @@ class Game:
         if not self.has_coin_active() and self.level.exit.get_rect().colliderect(self.player.get_rect()):
             self.sound_manager.stop_Music()
             self.sound_manager.playSound("win")
+            self.sound_manager.playMusic("win_bg")
             self.scene = "win"
             self.screen.fill(self._background_color)
             self.selected_button = 0
@@ -316,6 +317,7 @@ class Game:
     
     def handle_levels_button(self):
         self.scene = "levels"
+        self.sound_manager.playMusic("menu_bg")
         self.screen.fill(self._background_color)
         self.selected_button = 0
         scene = Levels(self.screen)
