@@ -18,6 +18,7 @@ from assets.scenes.Win import Win
 from assets.scenes.Final_win import Final_win
 from assets.scenes.Levels import Levels
 from assets.scenes.Ready import Ready
+from assets.scenes.Pause import Pause
 
 WIDTH = 800
 HEIGHT = 600
@@ -154,6 +155,9 @@ class Game:
                 if event.type == pg.QUIT:
                     self.running = False
                 
+                elif self.scene == "play" and event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    scene = self.handle_pause_button()
+                
                 elif self.scene == "menu":
                     scene = self.handle_buttons(scene,event,[self.handle_start_button,self.handle_levels_button,self.handle_quit_button])
 
@@ -170,6 +174,9 @@ class Game:
                 elif self.scene == "win":
                     scene = self.handle_buttons(scene,event,[self.handle_next_button,self.handle_reset_button,self.handle_menu_button])
                 
+                elif self.scene == "pause":
+                    scene = self.handle_buttons(scene,event,[self.handle_continue_button,self.handle_menu_button])
+
                 elif self.scene == "final_win":
                     scene = self.handle_buttons(scene,event,[self.handle_menu_button])
 
@@ -359,6 +366,29 @@ class Game:
             scene = Final_win(self.screen)
             scene.select_button(self.selected_button)
             return scene
+        
+    def handle_pause_button(self):
+        self.sound_manager.stop_Music()
+        self.sound_manager.stop_all_sounds()
+        self.sound_manager.playMusic("menu_bg")
+        self.scene = "pause"
+        self.time_start = time() - self.time_start - 1
+        self.selected_button = 0
+        self.screen.fill(self._background_color)
+        scene = Pause(self.screen)
+        scene.select_button(self.selected_button)
+        return scene
+    
+    def handle_continue_button(self):
+        if self.level.timer:
+            self.sound_manager.playMusic("timer_bg")
+        else:
+            self.sound_manager.playMusic("play_bg")
+        self.scene = "play"
+        self.ready_duration = 60
+        self.screen.fill(self._background_color)
+        Ready(self.screen)
+        self.time_start = time() - self.time_start
 
 
 if __name__ == '__main__':
