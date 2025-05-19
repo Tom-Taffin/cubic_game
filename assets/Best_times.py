@@ -55,4 +55,4 @@ class Best_times:
         return None
     
     def reset(self):
-        self.create_default_highscores()
+        self.best_times = self.create_default_highscores()

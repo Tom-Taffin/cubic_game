@@ -6,4 +6,5 @@ class Menu(Animate_scene):
         super().__init__(screen,screen.get_width()//2,screen.get_height()//6,"images/game_name.png", "main2_background")
         super().add_button("images/start.jpg")
         super().add_button("images/levels.jpg")
+        super().add_button("images/option.jpg")
         super().add_button("images/quit.jpg")

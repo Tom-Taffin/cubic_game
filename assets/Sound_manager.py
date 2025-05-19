@@ -12,15 +12,20 @@ class Sound_manager:
             "button_click" : pg.mixer.Sound("sounds/button_click.mp3")
         }
     
-    def playSound(self, name):
-        self.sounds[name].play()
+    def play_sound(self, name, sound):
+        if sound:
+            self.sounds[name].play()
 
-    def playMusic(self, name):
-        pg.mixer.music.load(f"sounds/{name}.mp3")
-        pg.mixer.music.play(-1)
+    def play_music(self, name, sound):
+        if sound:
+            pg.mixer.music.load(f"sounds/{name}.mp3")
+            pg.mixer.music.play(-1)
 
     def stop_all_sounds(self):
         pg.mixer.stop()
 
-    def stop_Music(self):
+    def stop_music(self):
         pg.mixer.music.stop()
+    
+    def is_playing_music(self):
+        return pg.mixer.music.get_busy()

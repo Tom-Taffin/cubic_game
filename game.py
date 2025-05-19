@@ -20,6 +20,7 @@ from assets.scenes.Final_win import Final_win
 from assets.scenes.Levels import Levels
 from assets.scenes.Ready import Ready
 from assets.scenes.Pause import Pause
+from assets.scenes.Option import Option
 
 WIDTH = 800
 HEIGHT = 600
@@ -36,6 +37,7 @@ class Game:
         self.levels = LEVELS
         self.sound_manager = Sound_manager()
         self.best_times = Best_times(self.levels)
+        self.sounds = True
         
         # apprentissage supervisé
         self.score = 0
@@ -168,7 +170,7 @@ class Game:
                     scene = self.handle_pause_button()
                 
                 elif self.scene == "menu":
-                    scene = self.handle_buttons(scene,event,[self.handle_start_button,self.handle_levels_button,self.handle_quit_button])
+                    scene = self.handle_buttons(scene,event,[self.handle_start_button,self.handle_levels_button,self.handle_option_button,self.handle_quit_button])
 
                 elif self.scene == "levels":
                     list_handle_button = []
@@ -188,6 +190,9 @@ class Game:
 
                 elif self.scene == "final_win":
                     scene = self.handle_buttons(scene,event,[self.handle_menu_button])
+                
+                elif self.scene == "option":
+                    scene = self.handle_buttons(scene,event,[lambda scene=scene: self.handle_sounds_button(scene),lambda scene=scene: self.handle_reset_records_button(scene),self.handle_menu_button])
 
             pg.display.flip()
 
@@ -216,7 +221,7 @@ class Game:
         for coin in self.level.coins:
             if coin.is_active == 1:
                 if coin.get_rect().colliderect(self.player.get_rect()):
-                    self.sound_manager.playSound("coin")
+                    self.sound_manager.play_sound("coin", self.sounds)
                     coin.is_active = 0
                 else:
                     coin.draw(self.screen)
@@ -246,9 +251,9 @@ class Game:
     
     def update_win(self):
         if not self.has_coin_active() and self.level.exit.get_rect().colliderect(self.player.get_rect()):
-            self.sound_manager.stop_Music()
-            self.sound_manager.playSound("win")
-            self.sound_manager.playMusic("win_bg")
+            self.sound_manager.stop_music()
+            self.sound_manager.play_sound("win",self.sounds)
+            self.sound_manager.play_music("win_bg",self.sounds)
             self.scene = "win"
             self.screen.fill(self._background_color)
             self.selected_button = 0
@@ -292,15 +297,16 @@ class Game:
         
         if i == -1:
             return scene
-        self.sound_manager.stop_all_sounds()
-        self.sound_manager.stop_Music()
-        self.sound_manager.playSound("button_click")
-        return list_handle_button[i]()
+        new_scene = list_handle_button[i]()
+        self.sound_manager.play_sound("button_click", self.sounds)
+        if new_scene:
+            return new_scene
+        return scene
     
     def game_over(self):
-        self.sound_manager.stop_Music()
-        self.sound_manager.playSound("game_over")
-        self.sound_manager.playMusic("game_over_bg")
+        self.sound_manager.stop_music()
+        self.sound_manager.play_sound("game_over", self.sounds)
+        self.sound_manager.play_music("game_over_bg", self.sounds)
         self.scene = "game_over"
         self.screen.fill(self._background_color)
         self.selected_button = 0
@@ -339,7 +345,9 @@ class Game:
     # ------------------------------------------ button behavior ----------------------------------------------------
 
     def handle_menu_button(self):
-        self.sound_manager.playMusic("menu_bg")
+        self.sound_manager.stop_all_sounds()
+        self.sound_manager.stop_music()
+        self.sound_manager.play_music("menu_bg", self.sounds)
         self.scene = "menu"
         self.selected_button = 0
         scene = Menu(self.screen)
@@ -348,19 +356,22 @@ class Game:
     
     def handle_levels_button(self):
         self.scene = "levels"
-        self.sound_manager.playMusic("menu_bg")
-        self.screen.fill(self._background_color)
+        self.sound_manager.stop_all_sounds()
+        self.sound_manager.stop_music()
+        self.sound_manager.play_music("menu_bg", self.sounds)
         self.selected_button = 0
         scene = Levels(self.screen)
         scene.select_button(self.selected_button)
         return scene
     
     def handle_play_button(self):
+        self.sound_manager.stop_all_sounds()
+        self.sound_manager.stop_music()
         self.restore_game()
         if self.level.timer:
-            self.sound_manager.playMusic("timer_bg")
+            self.sound_manager.play_music("timer_bg", self.sounds)
         else:
-            self.sound_manager.playMusic("play_bg")
+            self.sound_manager.play_music("play_bg", self.sounds)
         self.scene = "play"
         self.ready_duration = 60
         self.screen.fill(self._background_color)
@@ -384,7 +395,9 @@ class Game:
         if indice<len(self.levels):
             self.handle_start_button(indice)
         else:
-            self.sound_manager.playSound("final_win")
+            self.sound_manager.stop_all_sounds()
+            self.sound_manager.stop_music()
+            self.sound_manager.play_sound("final_win",self.sounds)
             self.scene = "final_win"
             self.selected_button = 0
             scene = Final_win(self.screen)
@@ -392,27 +405,57 @@ class Game:
             return scene
         
     def handle_pause_button(self):
-        self.sound_manager.stop_Music()
+        self.sound_manager.stop_music()
         self.sound_manager.stop_all_sounds()
-        self.sound_manager.playMusic("menu_bg")
+        self.sound_manager.play_music("menu_bg", self.sounds)
         self.scene = "pause"
         self.time_start = time() - self.time_start - 1
         self.selected_button = 0
-        self.screen.fill(self._background_color)
+        bg = pg.image.load("images/pause_bg.jpg")
+        bg = pg.transform.scale(bg,(1200,600))
+        self.screen.blit(bg,(-203,-7))
+        self.screen.blit
         scene = Pause(self.screen)
         scene.select_button(self.selected_button)
         return scene
     
     def handle_continue_button(self):
+        self.sound_manager.stop_all_sounds()
+        self.sound_manager.stop_music()
         if self.level.timer:
-            self.sound_manager.playMusic("timer_bg")
+            self.sound_manager.play_music("timer_bg", self.sounds)
         else:
-            self.sound_manager.playMusic("play_bg")
+            self.sound_manager.play_music("play_bg", self.sounds)
         self.scene = "play"
         self.ready_duration = 60
         self.screen.fill(self._background_color)
         Ready(self.screen)
         self.time_start = time() - self.time_start
+
+    def handle_option_button(self):
+        self.sound_manager.stop_all_sounds()
+        self.sound_manager.stop_music()
+        self.scene = "option"
+        self.sound_manager.play_music("menu_bg", self.sounds)
+        self.selected_button = 0
+        scene = Option(self.screen, self.sounds)
+        scene.select_button(self.selected_button)
+        return scene
+    
+    def handle_sounds_button(self, scene):
+        self.sounds = not self.sounds
+        scene.sounds = self.sounds
+        scene.update_sound_button()
+        if not self.sounds:
+            self.sound_manager.stop_all_sounds()
+            self.sound_manager.stop_music()
+        elif not self.sound_manager.is_playing_music():
+            self.sound_manager.play_music("menu_bg", self.sounds)
+
+    def handle_reset_records_button(self, scene):
+        self.best_times.reset()
+        scene.click_reset_button()
+
 
 
 if __name__ == '__main__':
