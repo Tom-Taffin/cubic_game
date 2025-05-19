@@ -1,9 +1,9 @@
-from assets.scenes.Scene import Scene
+from assets.scenes.Animate_scene import Animate_scene
 
-class Levels(Scene):
+class Levels(Animate_scene):
 
     def __init__(self, screen):
-        super().__init__(screen,screen.get_width()//2,screen.get_height()//8,"images/level_select.jpg")
+        super().__init__(screen,screen.get_width()//2,screen.get_height()//8,"images/level_select.jpg", "main_background")
         super().add_button("images/level0.jpg")
         super().add_button("images/level1.jpg")
         super().add_button("images/level2.jpg")

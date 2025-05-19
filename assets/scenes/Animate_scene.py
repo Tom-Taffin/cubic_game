@@ -11,10 +11,10 @@ class Animate_scene(Scene):
 
     def update(self, selected_button):
         if self.tick == 0:
-            self.tick = 7
+            self.tick = 2
             self.current_image = (self.current_image+1)%len(self.images)
             self.image = self.images[self.current_image]
-            self.image = pg.transform.scale(self.image,(800,620))
+            self.image = pg.transform.scale(self.image,(800,650))
             self.screen.blit(self.image,(0,0))
             self.screen.blit(self.banner, self.banner_rect)
             for i in range(len(self.buttons)):
@@ -33,6 +33,8 @@ def load_animation_images(background_name, nb_images):
     return images
 
 animations = {
-    "background_congradulation":load_animation_images("background_congradulation",12),
-    "background_menu":load_animation_images("background_menu",16)
+    "main_background":load_animation_images("main_background",112),
+    "main2_background":load_animation_images("main2_background",11),
+    "main3_background":load_animation_images("main3_background",19)
 }
+animations["main3_background"] += animations["main3_background"][::-1]

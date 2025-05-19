@@ -3,6 +3,7 @@ from time import time
 import random as rd
 
 from assets.Sound_manager import Sound_manager
+from assets.Best_times import Best_times
 from assets.Player import Player
 from assets.Level4 import Level4
 from assets.Level3 import Level3
@@ -31,6 +32,10 @@ class Game:
         self._height = HEIGHT
         self.level = level
         self.player = Player(level.entry.get_x(),level.entry.get_y())
+        self._background_color = pg.Color(0, 0, 0)
+        self.levels = LEVELS
+        self.sound_manager = Sound_manager()
+        self.best_times = Best_times(self.levels)
         
         # apprentissage supervisé
         self.score = 0
@@ -129,10 +134,6 @@ class Game:
     
     def playGUI(self):
 
-        self._background_color = pg.Color(0, 0, 0)
-        self.levels = LEVELS
-        self.sound_manager = Sound_manager()
-
         pg.init()
         self.screen = pg.display.set_mode((self._width, self._height))
         pg.display.set_caption("The hardest game")
@@ -148,8 +149,16 @@ class Game:
                 else:
                     scene = self.play_one_image()
             
-            elif self.scene == "menu" or self.scene == "final_win":
+            elif not self.scene == "pause":
                 scene.update(self.selected_button)
+                if self.scene == "game_over":
+                    self.display_nb_deaths()
+                    self.display_time()
+                if self.scene == "win":
+                    self.display_nb_deaths()
+                    time = self.display_time()
+                    self.display_best_time()
+
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -245,8 +254,9 @@ class Game:
             self.selected_button = 0
             scene = Win(self.screen)
             scene.select_button(self.selected_button)
-            self.display_nb_deaths()
-            self.display_time()
+            self.time = round(time() - self.time_start - 1, 2)
+            level_index = self.levels.index(self.level)
+            self.has_new_record = self.best_times.update_score(level_index,self.time)
             return scene
         
     def update_timer(self):
@@ -297,10 +307,12 @@ class Game:
         self.nb_dead += 1
         scene = Game_over(self.screen)
         scene.select_button(self.selected_button)
-        self.display_nb_deaths()
-        self.display_time()
+        self.time = round(time() - self.time_start - 1, 2)
         return scene
     
+
+    # ------------------------------------------ display methods ----------------------------------------------------
+
     def display_nb_deaths(self):
         font = pg.font.Font(None, 40)
         text_deaths = font.render(f'number of deaths: {self.nb_dead}',1,(255,255,255))
@@ -308,9 +320,21 @@ class Game:
 
     def display_time(self):
         font = pg.font.Font(None, 40)
-        text_time = font.render(f'time: {round(time() - self.time_start - 1, 2)}',1,(255,255,255))
+        text_time = font.render(f'time: {self.time}',1,(255,255,255))
         self.screen.blit(text_time, (20, 350))
     
+    def display_best_time(self):
+        level_index = self.levels.index(self.level)
+        font = pg.font.Font(None, 40)
+        text_record = font.render(f'best time : {self.best_times.get_best_time(level_index)}', 1, (255,255,255))
+        self.screen.blit(text_record, (20, 400))
+        if self.has_new_record:
+            self.display_new_record()
+
+    def display_new_record(self):
+        font = pg.font.Font(None, 40)
+        text_record = font.render('NEW RECORD !', 1, (255, 215, 0))
+        self.screen.blit(text_record, (20, 425))
     
     # ------------------------------------------ button behavior ----------------------------------------------------
 
