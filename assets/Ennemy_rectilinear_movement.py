@@ -4,7 +4,7 @@ import pygame as pg
 from assets.Entity import Entity
 
 
-class Ennemy(Entity):
+class Ennemy_rectilinear_movement(Entity):
     def __init__(self, x:int, y:int, deltaX:int, deltaY:int):
         super().__init__(x,y,30,30,pg.Color(255,0,0),deltaX,deltaY)
     

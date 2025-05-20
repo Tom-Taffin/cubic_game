@@ -1,11 +1,11 @@
 from assets.Coin import Coin
-from assets.Ennemy import Ennemy
+from assets.Ennemy_rectilinear_movement import Ennemy_rectilinear_movement
 from assets.Area import Area
 from assets.Timer import Timer
 
 class Level:
 
-    def __init__(self, coins:list[Coin], ennemies:list[Ennemy], entry:Area, exit:Area, width:int, height:int, timer:Timer = None):
+    def __init__(self, coins:list[Coin], ennemies:list[Ennemy_rectilinear_movement], entry:Area, exit:Area, width:int, height:int, timer:Timer = None):
         self.coins = coins
         self.ennemies = ennemies
         self.entry = entry

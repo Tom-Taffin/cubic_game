@@ -5,26 +5,31 @@ import random as rd
 from assets.Sound_manager import Sound_manager
 from assets.Best_times import Best_times
 from assets.Player import Player
-from assets.Level4 import Level4
-from assets.Level3 import Level3
-from assets.Level_random import Level_random
-from assets.Level1 import Level1
-from assets.Level0 import Level0
-from assets.Level import Level
-from assets.Level2 import Level2
+
+from assets.levels.Level import Level
+from assets.levels.Level0 import Level0
+from assets.levels.Level1 import Level1
+from assets.levels.Level2 import Level2
+from assets.levels.Level3 import Level3
+from assets.levels.Level4 import Level4
+from assets.levels.Level5 import Level5
+from assets.levels.Level6 import Level6
+from assets.levels.Level7 import Level7
+from assets.levels.Level8 import Level8
 
 from assets.scenes.Menu import Menu
 from assets.scenes.Game_over import Game_over
 from assets.scenes.Win import Win
 from assets.scenes.Final_win import Final_win
 from assets.scenes.Levels import Levels
+from assets.scenes.Levels2 import Levels2
 from assets.scenes.Ready import Ready
 from assets.scenes.Pause import Pause
 from assets.scenes.Option import Option
 
 WIDTH = 800
 HEIGHT = 600
-LEVELS = [Level0(WIDTH,HEIGHT), Level2(WIDTH,HEIGHT), Level1(WIDTH,HEIGHT),Level_random(WIDTH,HEIGHT),Level3(WIDTH,HEIGHT),Level4(WIDTH,HEIGHT)]
+LEVELS = [Level0(WIDTH,HEIGHT),Level1(WIDTH,HEIGHT),Level2(WIDTH,HEIGHT),Level3(WIDTH,HEIGHT),Level4(WIDTH,HEIGHT),Level5(WIDTH,HEIGHT),Level6(WIDTH,HEIGHT),Level7(WIDTH,HEIGHT),Level8(WIDTH,HEIGHT)]
 
 class Game:
 
@@ -171,19 +176,26 @@ class Game:
                 
                 elif self.scene == "menu":
                     scene = self.handle_buttons(scene,event,[self.handle_start_button,self.handle_levels_button,self.handle_option_button,self.handle_quit_button])
-
-                elif self.scene == "levels":
+                elif self.scene == "levels1":
                     list_handle_button = []
-                    for i in range(len(self.levels)):
-                        list_handle_button.append(lambda level_index=i: self.handle_start_button(level_index))
+                    index_start = 0
+                    self.init_level_buttons(list_handle_button, index_start)
+                    list_handle_button.append(self.handle_next_levels_button)
                     list_handle_button.append(self.handle_menu_button)
                     scene = self.handle_buttons(scene,event,list_handle_button)
-                
+                elif self.scene == "levels2":
+                    list_handle_button = []
+                    index_start = 5
+                    self.init_level_buttons(list_handle_button, index_start)
+                    list_handle_button.append(self.handle_back_levels_button)
+                    list_handle_button.append(self.handle_menu_button)
+                    scene = self.handle_buttons(scene,event,list_handle_button)
+                    
                 elif self.scene == "game_over":
                     scene = self.handle_buttons(scene,event,[self.handle_play_button,self.handle_menu_button])
                 
                 elif self.scene == "win":
-                    scene = self.handle_buttons(scene,event,[self.handle_next_button,self.handle_reset_button,self.handle_menu_button])
+                    scene = self.handle_buttons(scene,event,[self.handle_next_level_button,self.handle_reset_button,self.handle_menu_button])
                 
                 elif self.scene == "pause":
                     scene = self.handle_buttons(scene,event,[self.handle_continue_button,self.handle_menu_button])
@@ -272,6 +284,12 @@ class Game:
 
     # ------------------------------------------ some methods ----------------------------------------------------
 
+    def init_level_buttons(self, l, start_index):
+        i = start_index
+        while i< start_index + 5 and i < len(self.levels):
+            l.append(lambda level_index=i: self.handle_start_button(level_index))
+            i+=1
+                
 
     def restore_game(self):
         self.level.__init__(WIDTH,HEIGHT)
@@ -355,7 +373,7 @@ class Game:
         return scene
     
     def handle_levels_button(self):
-        self.scene = "levels"
+        self.scene = "levels1"
         self.sound_manager.stop_all_sounds()
         self.sound_manager.stop_music()
         self.sound_manager.play_music("menu_bg", self.sounds)
@@ -390,7 +408,7 @@ class Game:
     def handle_quit_button(self):
         self.running = False
 
-    def handle_next_button(self):
+    def handle_next_level_button(self):
         indice = self.levels.index(self.level)+1
         if indice<len(self.levels):
             self.handle_start_button(indice)
@@ -455,6 +473,20 @@ class Game:
     def handle_reset_records_button(self, scene):
         self.best_times.reset()
         scene.click_reset_button()
+
+    def handle_next_levels_button(self):
+        self.scene = "levels2"
+        self.selected_button = 0
+        scene = Levels2(self.screen)
+        scene.select_button(self.selected_button)
+        return scene
+    
+    def handle_back_levels_button(self):
+        self.scene = "levels1"
+        self.selected_button = 0
+        scene = Levels(self.screen)
+        scene.select_button(self.selected_button)
+        return scene
 
 
 
