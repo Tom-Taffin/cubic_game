@@ -1,28 +1,27 @@
 from game import Game
 from DQN import DQNAgent
-from assets.Level0 import Level0
+from assets.levels.dqn_levels.DQNLevel1 import DQNLevel1
 
 LENGTH = 800
 WIDTH = 600
 
 # Initialiser l'agent
-jeu = Game(Level0(LENGTH, WIDTH))
+jeu = Game(DQNLevel1(LENGTH, WIDTH))
 jeu.initScreen()
-agent = DQNAgent(state_dim=25, action_dim=5, batch_size=64)
+agent = DQNAgent(state_dim=len(jeu.state()), action_dim=5, batch_size=64)
 
 # Nombre d'épisodes d'entraînement
-n_episodes = 5000
+n_episodes = 1000
 
 
 
 for episode in range(n_episodes):
-    jeu.initGame()
+    jeu.initGame(DQNLevel1(LENGTH, WIDTH))
     state = jeu.state()  # Récupérer l'état initial
     done = False
     total_reward = 0
     if episode == n_episodes-1:
         f = open("last.txt", "w")
-        f.write(str(state) +"\n")
 
     while not done:
         action = agent.select_action(state)  # Sélectionner une action selon la politique ε-greedy
@@ -30,7 +29,7 @@ for episode in range(n_episodes):
         next_state = jeu.state()
 
         if episode == n_episodes-1:
-            f.write(str(next_state) + "\n")
+            f.write(str(action) + "\n")
 
         # Ajouter la transition dans le buffer de replay
         agent.store(state, action, reward, next_state, done)
