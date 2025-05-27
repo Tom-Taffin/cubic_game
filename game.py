@@ -16,6 +16,7 @@ from assets.levels.Level5 import Level5
 from assets.levels.Level6 import Level6
 from assets.levels.Level7 import Level7
 from assets.levels.Level8 import Level8
+from assets.levels.Level_ia import Level_ia
 
 from assets.scenes.Menu import Menu
 from assets.scenes.Game_over import Game_over
@@ -40,6 +41,7 @@ class Game:
         self.player = Player(level.entry.get_x(),level.entry.get_y())
         self._background_color = pg.Color(0, 0, 0)
         self.levels = LEVELS
+        self.levels[0] = Level_ia(self._width,self._height,self.player)
         self.sound_manager = Sound_manager()
         self.best_times = Best_times(self.levels)
         self.sounds = True
@@ -144,6 +146,8 @@ class Game:
         pg.init()
         self.screen = pg.display.set_mode((self._width, self._height))
         pg.display.set_caption("The hardest game")
+        icon = pg.image.load("images/icon.jpg")
+        pg.display.set_icon(icon)
         self.clock = pg.time.Clock()
         self.running = True
         scene = self.handle_menu_button()
@@ -216,6 +220,7 @@ class Game:
     # ------------------------------------------ play methods ----------------------------------------------------
 
     def play_one_image(self):
+        self.level.update()
         self.screen.fill(self._background_color)
         self.update_area()
         scene = self.update_timer()
@@ -240,7 +245,7 @@ class Game:
 
     def update_ennemies_and_defeat(self):
         for ennemy in self.level.ennemies:
-            if ennemy.get_rect().colliderect(self.player.get_rect()):
+            if ennemy.is_collision(self.player):
                 return self.game_over()
 
             else:
@@ -262,7 +267,7 @@ class Game:
         return False
     
     def update_win(self):
-        if not self.has_coin_active() and self.level.exit.get_rect().colliderect(self.player.get_rect()):
+        if not self.has_coin_active() and self.level.exit.is_collision(self.player):
             self.sound_manager.stop_music()
             self.sound_manager.play_sound("win",self.sounds)
             self.sound_manager.play_music("win_bg",self.sounds)
@@ -292,8 +297,9 @@ class Game:
                 
 
     def restore_game(self):
-        self.level.__init__(WIDTH,HEIGHT)
-        self.player = Player(self.level.entry.get_x(),self.level.entry.get_y())
+        self.level.restore()
+        self.player.get_rect().x = self.level.entry.get_x()
+        self.player.get_rect().y = self.level.entry.get_y()
         
     def handle_buttons(self, scene, event, list_handle_button):
         i=-1

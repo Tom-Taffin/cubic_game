@@ -13,3 +13,9 @@ class Level:
         self._width = width
         self._height = height
         self.timer = timer
+
+    def restore(self):
+        self.__init__(self._width,self._height)
+
+    def update(self):
+        pass

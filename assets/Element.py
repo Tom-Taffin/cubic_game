@@ -26,3 +26,6 @@ class Element:
     
     def draw(self, screen : pg.display):
         pg.draw.rect(screen, self._color, self._rect)
+
+    def is_collision(self,other):
+        return self.get_rect().colliderect(other.get_rect())
