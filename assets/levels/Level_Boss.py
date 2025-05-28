@@ -1,17 +1,16 @@
 from assets.Coin import Coin
-from assets.Ennemy_snake_self_kill import Ennemy_snake_self_kill
+from assets.ennemies.Ennemy_snake_self_kill import Ennemy_snake_self_kill
 from assets.Area import Area
+from assets.Entity import Entity
+from assets.Timer import Timer
 from assets.levels.Level import Level
 from assets.Player import Player
 
-class Level_ia(Level):
+class Level_Boss(Level):
 
-    def __init__(self, width:int, height:int, player:Player):
-    
-        coins = []
-        ennemies = [Ennemy_snake_self_kill(600,600,23,player,80)]
+    def __init__(self, coins:list[Coin], ennemies:list[Entity], width:int, height:int, player:Player, timer:Timer = None):
 
-        super().__init__(coins, ennemies, Area(0,0,False), Area(-100, -100,True), width, height)
+        super().__init__(coins, ennemies, Area(0,0,False), Area(-100, -100,True), width, height, timer)
         self.player = player
 
     def restore(self):

@@ -1,5 +1,5 @@
 from assets.Coin import Coin
-from assets.Ennemy_rectilinear_movement import Ennemy_rectilinear_movement
+from assets.ennemies.Ennemy_rectilinear_movement import Ennemy_rectilinear_movement
 from assets.Area import Area
 from assets.levels.Level import Level
 

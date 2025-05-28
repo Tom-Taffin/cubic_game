@@ -1,6 +1,6 @@
 from assets.Coin import Coin
-from assets.Ennemy_rectilinear_movement import Ennemy_rectilinear_movement
-from assets.Ennemy_static import Ennemy_static
+from assets.ennemies.Ennemy_rectilinear_movement import Ennemy_rectilinear_movement
+from assets.ennemies.Ennemy_static import Ennemy_static
 from assets.Area import Area
 from assets.levels.Level import Level
 

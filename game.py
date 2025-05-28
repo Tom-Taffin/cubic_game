@@ -16,7 +16,11 @@ from assets.levels.Level5 import Level5
 from assets.levels.Level6 import Level6
 from assets.levels.Level7 import Level7
 from assets.levels.Level8 import Level8
-from assets.levels.Level_ia import Level_ia
+from assets.levels.Level9 import Level9
+from assets.levels.Level10 import Level10
+from assets.levels.Level11 import Level11
+from assets.levels.Level12 import Level12
+from assets.levels.Level13 import Level13
 
 from assets.scenes.Menu import Menu
 from assets.scenes.Game_over import Game_over
@@ -30,7 +34,6 @@ from assets.scenes.Option import Option
 
 WIDTH = 800
 HEIGHT = 600
-LEVELS = [Level0(WIDTH,HEIGHT),Level1(WIDTH,HEIGHT),Level2(WIDTH,HEIGHT),Level3(WIDTH,HEIGHT),Level4(WIDTH,HEIGHT),Level5(WIDTH,HEIGHT),Level6(WIDTH,HEIGHT),Level7(WIDTH,HEIGHT),Level8(WIDTH,HEIGHT)]
 
 class Game:
 
@@ -40,8 +43,10 @@ class Game:
         self.level = level
         self.player = Player(level.entry.get_x(),level.entry.get_y())
         self._background_color = pg.Color(0, 0, 0)
-        self.levels = LEVELS
-        self.levels[0] = Level_ia(self._width,self._height,self.player)
+        self.levels = [Level0(WIDTH,HEIGHT),Level1(WIDTH,HEIGHT),Level2(WIDTH,HEIGHT),Level3(WIDTH,HEIGHT),Level4(WIDTH,HEIGHT),Level5(WIDTH,HEIGHT),Level6(WIDTH,HEIGHT),Level7(WIDTH,HEIGHT),Level8(WIDTH,HEIGHT)]
+        self.levels[0] = Level13(self._width,self._height)
+        self.levels[1] = Level10(self._width,self._height,self.player)
+        self.levels[2] = Level11(self._width,self._height,self.player)
         self.sound_manager = Sound_manager()
         self.best_times = Best_times(self.levels)
         self.sounds = True

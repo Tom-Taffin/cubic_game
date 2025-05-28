@@ -1,7 +1,7 @@
 import pygame as pg
 from assets.Player import Player
-from assets.Ennemy_ia import Ennemy_ia
-from assets.Ennemy_snake_tail import Ennemy_snake_tail
+from assets.ennemies.Ennemy_ia import Ennemy_ia
+from assets.ennemies.Ennemy_snake_tail import Ennemy_snake_tail
 from assets.Entity import Entity
 
 class Ennemy_snake(Entity):
@@ -9,7 +9,7 @@ class Ennemy_snake(Entity):
         head = Ennemy_ia(x,y,speed,player)
         self.ennemies = [head]
         tmp = head
-        for _ in range(length):
+        for _ in range(length-1):
             tmp = Ennemy_snake_tail(tmp,speed)
             self.ennemies.append(tmp)
         
