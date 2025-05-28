@@ -3,7 +3,7 @@ from assets.ennemies.Ennemy_circular_movement import Ennemy_circular_movement
 from assets.Area import Area
 from assets.levels.Level import Level
 
-class Level5(Level):
+class Level1_stage2(Level):
 
     def __init__(self, width:int, height:int):
     

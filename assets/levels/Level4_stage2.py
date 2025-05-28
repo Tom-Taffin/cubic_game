@@ -4,7 +4,7 @@ from assets.Area import Area
 from assets.levels.Level import Level
 from assets.Timer import Timer
 
-class Level8(Level):
+class Level4_stage2(Level):
 
     def __init__(self, width:int, height:int):
     

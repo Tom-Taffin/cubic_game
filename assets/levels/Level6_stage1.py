@@ -3,7 +3,7 @@ from assets.ennemies.Ennemy_static import Ennemy_static
 from assets.levels.Level_Boss import Level_Boss
 from assets.Player import Player
 
-class Level11(Level_Boss):
+class Level6_stage1(Level_Boss):
 
     def __init__(self, width:int, height:int, player:Player):
     

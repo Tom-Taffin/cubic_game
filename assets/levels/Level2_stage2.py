@@ -5,7 +5,7 @@ from assets.Area import Area
 from assets.levels.Level import Level
 import pygame as pg
 
-class Level6(Level):
+class Level2_stage2(Level):
 
     def __init__(self, width:int, height:int):
     

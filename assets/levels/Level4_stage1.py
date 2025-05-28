@@ -1,10 +1,9 @@
 from assets.Coin import Coin
 from assets.ennemies.Ennemy_rectilinear_movement import Ennemy_rectilinear_movement
-from assets.ennemies.Ennemy_static import Ennemy_static
 from assets.Area import Area
 from assets.levels.Level import Level
 
-class Level2(Level):
+class Level4_stage1(Level):
 
     def __init__(self, width:int, height:int):
     
@@ -12,10 +11,11 @@ class Level2(Level):
         ennemies = []
         for i in range(60,width-30, 60):
             if i%120==0:
-                ennemies.append(Ennemy_rectilinear_movement(i,height,0,7))
+                ennemies.append(Ennemy_rectilinear_movement(i,height,0,5))
             else:
-                ennemies.append(Ennemy_rectilinear_movement(i,0,0,7))
-        ennemies.append(Ennemy_static(0,150,width,5))
-        ennemies.append(Ennemy_static(0,height-150,width,5))
+                ennemies.append(Ennemy_rectilinear_movement(i,0,0,6))
+        
+        ennemies.append(Ennemy_rectilinear_movement(width,400,4,2))
+        ennemies.append(Ennemy_rectilinear_movement(0,200,4,2))
 
-        super().__init__(coins, ennemies, Area(0,280,False), Area(width-40, 280,True), width, height)
+        super().__init__(coins, ennemies, Area(0,0,False), Area(width-40, height-40,True), width, height)

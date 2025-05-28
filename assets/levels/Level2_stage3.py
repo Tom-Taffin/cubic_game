@@ -3,7 +3,7 @@ from assets.Coin import Coin
 from assets.levels.Level import Level
 from assets.ennemies.Ennemy_laser_pulsation import Ennemy_laser_pulsation
 
-class Level13(Level):
+class Level2_stage3(Level):
 
     def __init__(self, width:int, height:int):
     

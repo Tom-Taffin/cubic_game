@@ -2,8 +2,9 @@ from assets.Coin import Coin
 from assets.ennemies.Ennemy_rectilinear_movement import Ennemy_rectilinear_movement
 from assets.Area import Area
 from assets.levels.Level import Level
+from assets.Timer import Timer
 
-class Level3(Level):
+class Level5_stage1(Level):
 
     def __init__(self, width:int, height:int):
     
@@ -15,10 +16,7 @@ class Level3(Level):
             else:
                 ennemies.append(Ennemy_rectilinear_movement(i,0,0,6))
         
-        for i in range(200,height-30, 200):
-            if i%400==0:
-                ennemies.append(Ennemy_rectilinear_movement(width,i,4,2))
-            else:
-                ennemies.append(Ennemy_rectilinear_movement(0,i,4,2))
+        ennemies.append(Ennemy_rectilinear_movement(width,400,4,2))
+        ennemies.append(Ennemy_rectilinear_movement(0,200,4,2))
 
-        super().__init__(coins, ennemies, Area(0,0,False), Area(width-40, height-40,True), width, height)
+        super().__init__(coins, ennemies, Area(0,0,False), Area(width-40, height-40,True), width, height, Timer(5))
