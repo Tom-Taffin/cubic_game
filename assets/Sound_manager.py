@@ -29,3 +29,14 @@ class Sound_manager:
     
     def is_playing_music(self):
         return pg.mixer.music.get_busy()
+    
+    def start_level_music(self, level, sounds_enabled):       
+        if level.timer:
+            self.play_music("timer_bg", sounds_enabled)
+        else:
+            self.play_music("play_bg", sounds_enabled)
+
+    def play_menu_sound(self, sounds_enabled):
+        self.stop_all_sounds()
+        self.stop_music()
+        self.play_music("menu_bg", sounds_enabled)

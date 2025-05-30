@@ -52,4 +52,11 @@ class Screen_manager:
         if has_new_record:
             self.draw_text('NEW RECORD !',(20, 425), color=(255, 215, 0))
 
+    def display_background(self, background_name, scale = None, pos = (0,0)):
+        # display the background
+        bg = pg.image.load(f"images/{background_name}")
+        if scale:
+            bg = pg.transform.scale(bg,scale)
+        self.screen.blit(bg,pos)
+
     
