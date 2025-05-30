@@ -124,7 +124,7 @@ class Levels_manager:
     
     def update_scene(self, stage_number: int):
         self.current_scene = Levels_scene(
-            self.game.screen, 
+            self.game.screen_manager.get_screen(), 
             self.stage_manager, 
             stage_number
         )

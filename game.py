@@ -2,6 +2,8 @@ import pygame as pg
 from time import time
 import random as rd
 
+from assets.Game_logic import Game_logic
+from assets.Screen_manager import Screen_manager
 from assets.Sound_manager import Sound_manager
 from assets.Best_times import Best_times
 from assets.Player import Player
@@ -39,22 +41,24 @@ HEIGHT = 600
 
 class Game:
 
-    def __init__(self, level:Level):
-        self._width = WIDTH
-        self._height = HEIGHT
-        self.level = level
-        self.player = Player(level.entry.get_x(),level.entry.get_y())
-        self._background_color = pg.Color(0, 0, 0)
+    def __init__(self):
+        self.screen_manager = Screen_manager(WIDTH,HEIGHT)
+        self.player = Player(0,0)
         self.levels = [Level1_stage1(WIDTH,HEIGHT),Level2_stage1(WIDTH,HEIGHT),Level3_stage1(WIDTH,HEIGHT),Level4_stage1(WIDTH,HEIGHT),Level5_stage1(WIDTH,HEIGHT),Level6_stage1(WIDTH,HEIGHT,self.player),
                        Level1_stage2(WIDTH,HEIGHT),Level2_stage2(WIDTH,HEIGHT),Level3_stage2(WIDTH,HEIGHT),Level4_stage2(WIDTH,HEIGHT),Level5_stage2(WIDTH,HEIGHT,self.player),
                        Level1_stage3(WIDTH,HEIGHT),Level2_stage3(WIDTH,HEIGHT),Level3_stage3(WIDTH,HEIGHT,self.player),Level4_stage3(WIDTH,HEIGHT),Level5_stage3(WIDTH,HEIGHT,self.player)
                        ]
+        self.level = self.levels[0]
         self.sound_manager = Sound_manager()
         self.levels_manager = Levels_manager(self)
         self.best_times = Best_times(self.levels)
         self.sounds = True
         
+        
         # apprentissage supervisé
+        self._width = WIDTH
+        self._height = HEIGHT
+        self._background_color = pg.Color(0, 0, 0)
         self.score = 0
     
     # apprentissage supervisé
@@ -151,12 +155,7 @@ class Game:
     
     def playGUI(self):
 
-        pg.init()
-        self.screen = pg.display.set_mode((self._width, self._height))
-        pg.display.set_caption("The hardest game")
-        icon = pg.image.load("images/icon.jpg")
-        pg.display.set_icon(icon)
-        self.clock = pg.time.Clock()
+        self.screen_manager.init_display()
         self.running = True
         scene = self.handle_menu_button()
 
@@ -170,13 +169,12 @@ class Game:
             
             elif not self.scene == "pause":
                 scene.update(self.selected_button)
-                if self.scene == "game_over":
-                    self.display_nb_deaths()
-                    self.display_time()
+                if self.scene in ["game_over","win"]:
+                    self.screen_manager.display_nb_deaths(self.nb_deaths)
+                    self.screen_manager.display_time(self.time)
                 if self.scene == "win":
-                    self.display_nb_deaths()
-                    time = self.display_time()
-                    self.display_best_time()
+                    level_index = self.levels.index(self.level)
+                    self.screen_manager.display_best_time(self.best_times.get_best_time(level_index),self.has_new_record)
 
 
             for event in pg.event.get():
@@ -208,9 +206,7 @@ class Game:
                 elif self.scene == "option":
                     scene = self.handle_buttons(scene,event,[lambda scene=scene: self.handle_sounds_button(scene),lambda scene=scene: self.handle_reset_records_button(scene),self.handle_menu_button])
 
-            pg.display.flip()
-
-            self.clock.tick(60)
+            self.screen_manager.update_display()
         
         pg.quit()
     
@@ -219,27 +215,28 @@ class Game:
 
     def play_one_image(self):
         self.level.update()
-        self.screen.fill(self._background_color)
+        self.screen_manager.clear_screen()
         self.update_area()
         scene = self.update_timer()
+        # timer return Game_over scene if is finish
         if scene:
             return scene
         self.update_player()
         self.update_coins()
         scene = self.update_ennemies_and_defeat()
+        # scene = Game_over if there is a collision between the player and an enemy
         if scene:
             return scene
-        return self.update_win()
-
+        return self.update_win() # return Win scene if player won
 
     def update_coins(self):
         for coin in self.level.coins:
             if coin.is_active == 1:
-                if coin.get_rect().colliderect(self.player.get_rect()):
+                if coin.is_collision(self.player):
                     self.sound_manager.play_sound("coin", self.sounds)
                     coin.is_active = 0
                 else:
-                    coin.draw(self.screen)
+                    coin.draw(self.screen_manager.get_screen())
 
     def update_ennemies_and_defeat(self):
         for ennemy in self.level.ennemies:
@@ -248,15 +245,15 @@ class Game:
 
             else:
                 ennemy.move(self._width, self._height)
-                ennemy.draw(self.screen)
+                ennemy.draw(self.screen_manager.get_screen())
 
     def update_area(self):
-        self.level.entry.draw(self.screen)
-        self.level.exit.draw(self.screen)
+        self.level.entry.draw(self.screen_manager.get_screen())
+        self.level.exit.draw(self.screen_manager.get_screen())
 
     def update_player(self):
         self.player.update(self._width, self._height)
-        self.player.draw(self.screen)
+        self.player.draw(self.screen_manager.get_screen())
     
     def has_coin_active(self):
         for coin in self.level.coins:
@@ -270,9 +267,8 @@ class Game:
             self.sound_manager.play_sound("win",self.sounds)
             self.sound_manager.play_music("win_bg",self.sounds)
             self.scene = "win"
-            self.screen.fill(self._background_color)
             self.selected_button = 0
-            scene = Win(self.screen)
+            scene = Win(self.screen_manager.get_screen())
             scene.select_button(self.selected_button)
             self.time = round(time() - self.time_start - 1, 2)
             level_index = self.levels.index(self.level)
@@ -281,7 +277,7 @@ class Game:
         
     def update_timer(self):
         if self.level.timer:
-            self.level.timer.update_bar(self.screen)
+            self.level.timer.update_bar(self.screen_manager.get_screen())
             if self.level.timer.is_finish():
                 return self.game_over()
 
@@ -323,39 +319,12 @@ class Game:
         self.sound_manager.play_sound("game_over", self.sounds)
         self.sound_manager.play_music("game_over_bg", self.sounds)
         self.scene = "game_over"
-        self.screen.fill(self._background_color)
         self.selected_button = 0
-        self.nb_dead += 1
-        scene = Game_over(self.screen)
+        self.nb_deaths += 1
+        scene = Game_over(self.screen_manager.get_screen())
         scene.select_button(self.selected_button)
         self.time = round(time() - self.time_start - 1, 2)
         return scene
-    
-
-    # ------------------------------------------ display methods ----------------------------------------------------
-
-    def display_nb_deaths(self):
-        font = pg.font.Font(None, 40)
-        text_deaths = font.render(f'number of deaths: {self.nb_dead}',1,(255,255,255))
-        self.screen.blit(text_deaths, (20, 300))
-
-    def display_time(self):
-        font = pg.font.Font(None, 40)
-        text_time = font.render(f'time: {self.time}',1,(255,255,255))
-        self.screen.blit(text_time, (20, 350))
-    
-    def display_best_time(self):
-        level_index = self.levels.index(self.level)
-        font = pg.font.Font(None, 40)
-        text_record = font.render(f'best time : {self.best_times.get_best_time(level_index)}', 1, (255,255,255))
-        self.screen.blit(text_record, (20, 400))
-        if self.has_new_record:
-            self.display_new_record()
-
-    def display_new_record(self):
-        font = pg.font.Font(None, 40)
-        text_record = font.render('NEW RECORD !', 1, (255, 215, 0))
-        self.screen.blit(text_record, (20, 425))
     
     # ------------------------------------------ button behavior ----------------------------------------------------
 
@@ -365,7 +334,7 @@ class Game:
         self.sound_manager.play_music("menu_bg", self.sounds)
         self.scene = "menu"
         self.selected_button = 0
-        scene = Menu(self.screen)
+        scene = Menu(self.screen_manager.get_screen())
         scene.select_button(self.selected_button)
         return scene
     
@@ -386,18 +355,18 @@ class Game:
             self.sound_manager.play_music("play_bg", self.sounds)
         self.scene = "play"
         self.ready_duration = 60
-        self.screen.fill(self._background_color)
-        Ready(self.screen)
+        self.screen_manager.get_screen().fill(self._background_color)
+        Ready(self.screen_manager.get_screen())
         self.time_start = time()
 
     def handle_start_button(self, i = 0):
         self.level = self.levels[i]
         self.handle_play_button()
-        self.nb_dead = 0
+        self.nb_deaths = 0
 
     def handle_reset_button(self):
         self.handle_play_button()
-        self.nb_dead = 0
+        self.nb_deaths = 0
 
     def handle_quit_button(self):
         self.running = False
@@ -412,24 +381,24 @@ class Game:
             self.sound_manager.play_sound("final_win",self.sounds)
             self.scene = "final_win"
             self.selected_button = 0
-            scene = Final_win(self.screen)
+            scene = Final_win(self.screen_manager.get_screen())
             scene.select_button(self.selected_button)
             return scene
         
     def handle_pause_button(self):
-        self.sound_manager.stop_music()
-        self.sound_manager.stop_all_sounds()
-        self.sound_manager.play_music("menu_bg", self.sounds)
-        self.scene = "pause"
-        self.time_start = time() - self.time_start - 1
-        self.selected_button = 0
-        bg = pg.image.load("images/pause_bg.jpg")
-        bg = pg.transform.scale(bg,(1200,600))
-        self.screen.blit(bg,(-203,-7))
-        self.screen.blit
-        scene = Pause(self.screen)
-        scene.select_button(self.selected_button)
-        return scene
+        if self.ready_duration==0:
+            self.sound_manager.stop_music()
+            self.sound_manager.stop_all_sounds()
+            self.sound_manager.play_music("menu_bg", self.sounds)
+            self.scene = "pause"
+            self.time_start = time() - self.time_start - 1
+            self.selected_button = 0
+            bg = pg.image.load("images/pause_bg.jpg")
+            bg = pg.transform.scale(bg,(1200,600))
+            self.screen_manager.get_screen().blit(bg,(-203,-7))
+            scene = Pause(self.screen_manager.get_screen())
+            scene.select_button(self.selected_button)
+            return scene
     
     def handle_continue_button(self):
         self.sound_manager.stop_all_sounds()
@@ -441,7 +410,7 @@ class Game:
         self.scene = "play"
         self.ready_duration = 60
         self.screen.fill(self._background_color)
-        Ready(self.screen)
+        Ready(self.screen_manager.get_screen())
         self.time_start = time() - self.time_start
 
     def handle_option_button(self):
@@ -450,7 +419,7 @@ class Game:
         self.scene = "option"
         self.sound_manager.play_music("menu_bg", self.sounds)
         self.selected_button = 0
-        scene = Option(self.screen, self.sounds)
+        scene = Option(self.screen_manager.get_screen(), self.sounds)
         scene.select_button(self.selected_button)
         return scene
     
@@ -479,5 +448,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game(Level1_stage1(WIDTH,HEIGHT))
+    game = Game()
     game.playGUI()
