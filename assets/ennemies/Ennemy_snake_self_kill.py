@@ -1,4 +1,4 @@
-from assets.Explosion import Explosion
+from assets.Animation import Animation
 from assets.Player import Player
 from assets.ennemies.Ennemy_snake_can_die import Ennemy_snake_can_die
 
@@ -11,7 +11,7 @@ class Ennemy_snake_self_kill(Ennemy_snake_can_die):
         for i in range(2,len(self.ennemies)):
             if self.ennemies[0].is_collision(self.ennemies[i]):
                 for ennemy in self.ennemies[i:]:
-                    self.explosions.append(Explosion(ennemy.get_x(),ennemy.get_y(),30,30))
+                    self.explosions.append(Animation("explosion",ennemy.get_x(),ennemy.get_y(),30,30))
                 self.ennemies = self.ennemies[:i]
                 break
 
@@ -23,7 +23,7 @@ class Ennemy_snake_self_kill(Ennemy_snake_can_die):
         super().draw(screen)
         if len(self.ennemies) <= 15:
             for ennemy in self.ennemies:
-                self.explosions.append(Explosion(ennemy.get_x(),ennemy.get_y(),30,30))
+                self.explosions.append(Animation("explosion",ennemy.get_x(),ennemy.get_y(),30,30))
             self.ennemies = []
 
         

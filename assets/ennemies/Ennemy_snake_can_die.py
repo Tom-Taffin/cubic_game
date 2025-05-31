@@ -1,4 +1,3 @@
-from assets.Explosion import Explosion
 from assets.Player import Player
 from assets.ennemies.Ennemy_snake import Ennemy_snake
 

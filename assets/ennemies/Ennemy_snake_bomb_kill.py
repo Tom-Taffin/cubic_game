@@ -1,4 +1,4 @@
-from assets.Explosion import Explosion
+from assets.Animation import Animation
 from assets.Player import Player
 from assets.ennemies.Ennemy_snake_can_die import Ennemy_snake_can_die
 from assets.ennemies.Ennemy_static import Ennemy_static
@@ -9,14 +9,6 @@ class Ennemy_snake_bomb_kill(Ennemy_snake_can_die):
         super().__init__(x,y,speed,player,length)
         self.bombs = bombs
 
-    def bomb_kill(self):
-        for i in range(2,len(self.ennemies)):
-            if self.ennemies[0].is_collision(self.ennemies[i]):
-                for ennemy in self.ennemies[i:]:
-                    self.explosions.append(Explosion(ennemy.get_x(),ennemy.get_y(),30,30))
-                self.ennemies = self.ennemies[:i]
-                break
-
     def move(self, board_width, board_height):
         if not self.is_kill():
             super().move(board_width, board_height)
@@ -24,7 +16,7 @@ class Ennemy_snake_bomb_kill(Ennemy_snake_can_die):
                 if bombs.is_collision(self.ennemies[0]):
                     self.bombs.remove(bombs)
                     for ennemy in self.ennemies:
-                        self.explosions.append(Explosion(ennemy.get_x(),ennemy.get_y(),30,30))
+                        self.explosions.append(Animation("explosion",ennemy.get_x(),ennemy.get_y(),30,30))
                     self.ennemies = []
                     break
     

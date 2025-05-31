@@ -106,7 +106,7 @@ class Game_logic:
         self.time = round(time() - self.time_start - 1, 2)
 
     def update_level(self):
-        self.level.update()
+        return self.level.update(self.screen_manager.get_screen())
 
     def restore_game(self):
         self.level.restore()

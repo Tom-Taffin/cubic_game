@@ -142,18 +142,18 @@ class Game:
     # ------------------------------------------ play methods ----------------------------------------------------
 
     def play_one_image(self):
-        self.game_logic.update_level()
-        self.screen_manager.clear_screen()
-        self.game_logic.update_area()
-        game_over = self.game_logic.update_timer()
-        if game_over:
-            return self.game_over()
-        self.game_logic.update_player()
-        self.game_logic.update_coins()
-        game_over = self.game_logic.update_ennemies_and_defeat()
-        if game_over:
-            return self.game_over()
-        return self.update_win()
+        if not self.game_logic.update_level(): # update_level return True if it is necessary to wait
+            self.screen_manager.clear_screen()
+            self.game_logic.update_area()
+            game_over = self.game_logic.update_timer()
+            if game_over:
+                return self.game_over()
+            self.game_logic.update_player()
+            self.game_logic.update_coins()
+            game_over = self.game_logic.update_ennemies_and_defeat()
+            if game_over:
+                return self.game_over()
+            return self.update_win()
 
     def game_over(self):
         self.game_logic.game_over()

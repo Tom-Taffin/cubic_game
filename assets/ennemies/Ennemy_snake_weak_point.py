@@ -1,5 +1,5 @@
 import pygame as pg
-from assets.Explosion import Explosion
+from assets.Animation import Animation
 from assets.Player import Player
 from assets.ennemies.Ennemy_snake_can_die import Ennemy_snake_can_die
 
@@ -16,7 +16,7 @@ class Ennemy_snake_weak_point(Ennemy_snake_can_die):
             super().move(board_width, board_height)
             if self.ennemies[-1].is_collision(self.player):
                 for ennemy in self.ennemies[-10:]:
-                    self.explosions.append(Explosion(ennemy.get_x(),ennemy.get_y(),30,30))
+                    self.explosions.append(Animation("explosion",ennemy.get_x(),ennemy.get_y(),30,30))
                 self.ennemies = self.ennemies[:-10]
                 if not self.is_kill():
                     self.ennemies[-1]._color = pg.Color(0,255,255)

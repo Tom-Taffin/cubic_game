@@ -17,5 +17,5 @@ class Level:
     def restore(self):
         self.__init__(self._width,self._height)
 
-    def update(self):
+    def update(self, screen):
         pass

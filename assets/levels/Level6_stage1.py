@@ -13,9 +13,13 @@ class Level6_stage1(Level_Boss):
 
         super().__init__(coins, ennemies, width, height, player)
 
-    def update(self):
+    def update(self, screen):
+        if not self.animation.is_finish():
+            self.animation.update(screen)
+            return True
         for ennemy in self.ennemies:
             if not ennemy.is_kill():
                 return 
         self.exit._rect.x = self._width-40
         self.exit._rect.y = self._height-40
+        return False
