@@ -1,5 +1,4 @@
 from time import time
-import pygame as pg
 from assets.Best_times import Best_times
 from assets.Player import Player
 
@@ -20,7 +19,6 @@ from assets.levels.Level2_stage3 import Level2_stage3
 from assets.levels.Level3_stage3 import Level3_stage3
 from assets.levels.Level4_stage3 import Level4_stage3
 from assets.levels.Level5_stage3 import Level5_stage3
-
 
 class Game_logic:
     

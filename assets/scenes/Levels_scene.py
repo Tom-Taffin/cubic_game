@@ -128,9 +128,8 @@ class Levels_manager:
             self.stage_manager, 
             stage_number
         )
-        self.game.scene = "levels"
-        self.game.selected_button = 0
-        self.current_scene.select_button(self.game.selected_button)
+        self.game.scene_manager.selected_button = 0
+        self.current_scene.select_button(self.game.scene_manager.selected_button)
         return self.current_scene
     
     def get_buttons_action(self):
