@@ -16,7 +16,6 @@ class Scene_manager:
         self.current_scene = None
         self.scene_name = "menu"
         self.selected_button = 0
-        self.ready_duration = 0
         
         # Mapping scene names to their classes
         self.scene_classes = {
@@ -66,9 +65,6 @@ class Scene_manager:
         self.selected_button = 0
         
         if scene_name == "play":
-            self.ready_duration = 60
-            self.game.screen_manager.clear_screen()
-            Ready(self.game.screen_manager.get_screen())
             self.current_scene = None
         elif scene_name == "levels":
             self.current_scene = self.game.levels_manager.update_scene(1)
@@ -149,10 +145,7 @@ class Scene_manager:
     def update(self):
         """Updates the current scene"""
         if self.scene_name == "play":
-            if self.ready_duration > 0:
-                self.ready_duration -= 1
-            else:
-                return self.game.play_one_image()
+            self.game.play_one_image()
         elif self.current_scene and self.scene_name != "pause":
             self.current_scene.update(self.selected_button)
             

@@ -58,7 +58,7 @@ class Game_logic:
             self.sound_manager.stop_music()
             self.sound_manager.play_sound("win",self.sounds_enabled)
             self.sound_manager.play_music("win_bg",self.sounds_enabled)
-            self.time = round(time() - self.time_start - 1, 2)
+            self.time = round(time() - self.time_start - self.intro_duration/60, 1)
             level_index = self.levels.index(self.level)
             self.has_new_record = self.best_times.update_score(level_index,self.time)
 
@@ -103,7 +103,7 @@ class Game_logic:
         self.sound_manager.play_sound("game_over", self.sounds_enabled)
         self.sound_manager.play_music("game_over_bg", self.sounds_enabled)
         self.nb_deaths += 1
-        self.time = round(time() - self.time_start - 1, 2)
+        self.time = round(time() - self.time_start - self.intro_duration/60, 1)
 
     def update_level(self):
         return self.level.update(self.screen_manager.get_screen())
@@ -128,6 +128,8 @@ class Game_logic:
         self.sound_manager.start_level_music(self.level, self.sounds_enabled)
         self.time_start = time()
         self.screen_manager.clear_screen()
+        self.level.intro_duration = 60
+        self.intro_duration = 60
     
     def handle_start_button(self, i = 0):
         self.level = self.levels[i]
@@ -146,13 +148,14 @@ class Game_logic:
         self.sound_manager.play_menu_sound(self.sounds_enabled)
         self.time_start = time() - self.time_start - 1
         self.selected_button = 0
-        self.screen_manager.display_background("pause_bg.jpg", (1200,600), (-203,-7))
+        self.screen_manager.display_background("pause_bg.jpg", (1200,600), (-203,0))
     
     def handle_continue_button(self):
         self.sound_manager.stop_all_sounds()
         self.sound_manager.stop_music()
         self.sound_manager.start_level_music(self.level, self.sounds_enabled)
         self.time_start = time() - self.time_start
+        self.level.intro_duration = 60
 
     def handle_option_button(self):
         self.sound_manager.play_menu_sound(self.sounds_enabled)

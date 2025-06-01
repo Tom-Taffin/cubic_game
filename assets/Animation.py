@@ -31,5 +31,7 @@ def load_animation_images(name, nb_images, type = "jpg"):
 
 animations = {
     "explosion":load_animation_images("explosion",5,"png"),
-    "boss":load_animation_images("boss",24)
+    "boss":load_animation_images("boss",24),
+    "circle":load_animation_images("circle",4)
 }
+animations["circle"]= animations["circle"]*4

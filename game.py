@@ -147,13 +147,13 @@ class Game:
             self.game_logic.update_area()
             game_over = self.game_logic.update_timer()
             if game_over:
-                return self.game_over()
+                self.game_over()
             self.game_logic.update_player()
             self.game_logic.update_coins()
             game_over = self.game_logic.update_ennemies_and_defeat()
             if game_over:
-                return self.game_over()
-            return self.update_win()
+                self.game_over()
+            self.update_win()
 
     def game_over(self):
         self.game_logic.game_over()
@@ -181,6 +181,8 @@ class Game:
     def handle_start_button(self, i = 0):
         self.game_logic.handle_start_button(i)
         self.handle_play_button()
+        self.game_logic.level.restore_intro_duration()
+        self.game_logic.intro_duration = self.game_logic.level.init_intro_duration
 
     def handle_reset_button(self):
         self.game_logic.handle_reset_button()
@@ -198,7 +200,7 @@ class Game:
             self.scene_manager.change_scene("final_win")
         
     def handle_pause_button(self):
-        if self.scene_manager.ready_duration==0:
+        if self.game_logic.level.intro_duration == 0:
             self.game_logic.handle_pause_button()
             self.scene_manager.change_scene("pause")
     
