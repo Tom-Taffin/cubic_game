@@ -218,7 +218,7 @@ class Game:
         scene.update_sound_button()
 
     def handle_reset_records_button(self, scene):
-        self.game_logic.handle_reset_button()
+        self.game_logic.handle_reset_records_button()
         scene.click_reset_button()
 
     def handle_next_stage_button(self, current_stage_number):
