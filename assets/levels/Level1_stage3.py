@@ -17,6 +17,8 @@ class Level1_stage3(Level):
             ennemies.append(Ennemy_laser_pulsation(0,i,width,i,3,40,40,40))
 
         super().__init__(coins, ennemies, Area(0,0,False), Area(width-40, height-40,True), width, height)
+
+        # added stage 3 intro
         self.intro_duration = 120
         self.init_intro_duration = 120
         self.intro_bg_image = pg.image.load("images/stage3_bg.jpg")
@@ -25,7 +27,11 @@ class Level1_stage3(Level):
         self.intro_image = pg.transform.scale(self.intro_image,(width//2, height//8))
 
     def update(self, screen):
-        # returns true if it is necessary to wait
+        """
+        Returns true if it is necessary to wait and displays the intro.
+        Otherwise, returns false if the intro is complete.
+        This level have a stage 2 intro and the ready intro
+        """
         if self.intro_duration > 60:
             self.intro_duration -= 1
             screen.blit(self.intro_bg_image,(0,0))

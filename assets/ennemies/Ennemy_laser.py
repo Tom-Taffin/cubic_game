@@ -2,6 +2,9 @@ import math
 import pygame as pg
 
 class Ennemy_laser:
+    """
+    Laser from point x to point y that kills the player.
+    """
     def __init__(self, x1:int, y1:int, x2:int, y2:int, width:int = 3):
         self.x1 = x1
         self.y1 = y1

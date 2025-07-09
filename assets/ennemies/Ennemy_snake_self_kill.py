@@ -4,6 +4,9 @@ from assets.ennemies.Ennemy_snake_can_die import Ennemy_snake_can_die
 
 
 class Ennemy_snake_self_kill(Ennemy_snake_can_die):
+    """
+    Snake that dies when its size is less than 15. Its size decreases when it collides with itself.
+    """
     def __init__(self, x:int, y:int, speed:int, player:Player, length:int):
         super().__init__(x,y,speed,player,length)
 

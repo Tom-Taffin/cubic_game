@@ -14,6 +14,7 @@ class Ennemy_snake_tail(Entity):
         self.futur_y = self._head._rect.y
     
     def move(self, board_width:int, board_height:int):
+        """takes the old position of his head"""
         self.tick -= 1
         if self.tick <= 0:
             self.tick = self.init_tick

@@ -5,6 +5,12 @@ from assets.ennemies.Ennemy_snake_can_die import Ennemy_snake_can_die
 
 
 class Ennemy_snake_weak_point(Ennemy_snake_can_die):
+    """
+    A snake that dies when its size reaches 0.
+    It has a weak point at the end of its tail.
+    When the player touches this weak point, the snake's size decreases by 10.
+    Therefore, choose a size that is a multiple of 10.
+    """
     def __init__(self, x:int, y:int, speed:int, player:Player, length:int):
         super().__init__(x,y,speed,player,length)
         self.explosions = []

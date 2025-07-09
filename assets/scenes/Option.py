@@ -3,7 +3,7 @@ import pygame as pg
 
 class Option(Animate_scene):
 
-    def __init__(self, screen, sound):
+    def __init__(self, screen, sounds_enabled):
         super().__init__(screen,screen.get_width()//2,screen.get_height()//6,"images/game_name.png", "main_background")
         super().add_button("images/on.jpg")
         super().add_button("images/reset.jpg")
@@ -22,10 +22,11 @@ class Option(Animate_scene):
         self.reset_button_selected_clicked = pg.image.load("images/reset_selected_clicked.jpg")
         self.reset_button_selected_clicked = pg.transform.scale(self.reset_button_selected_clicked,(self.banner_rect.width//3,self.banner_rect.height//2))
 
-        self.sounds = sound
+        self.sounds_enabled = sounds_enabled
         self.update_sound_button()
         
     def update(self, selected_button):
+        """display the new background image for animation"""
         super().update(selected_button)
         font = pg.font.Font(None, 50)
         text_time = font.render(f'sounds:',1,(255,255,255))
@@ -36,9 +37,11 @@ class Option(Animate_scene):
     
 
     def update_sound_button(self):
-        self.buttons[0] = self.on_button if self.sounds else self.off_button
-        self.selected_buttons[0] = self.on_button_selected if self.sounds else self.off_button_selected
+        """change the sound button depending on self.sounds"""
+        self.buttons[0] = self.on_button if self.sounds_enabled else self.off_button
+        self.selected_buttons[0] = self.on_button_selected if self.sounds_enabled else self.off_button_selected
 
     def click_reset_button(self):
+        """change the reset button"""
         self.buttons[1] = self.reset_button_clicked
         self.selected_buttons[1] = self.reset_button_selected_clicked

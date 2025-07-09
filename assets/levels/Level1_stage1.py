@@ -4,8 +4,6 @@ from assets.Area import Area
 from assets.levels.Level import Level
 import pygame as pg
 
-from assets.scenes.Ready import Ready
-
 class Level1_stage1(Level):
 
     def __init__(self, width:int, height:int):
@@ -17,6 +15,7 @@ class Level1_stage1(Level):
 
         super().__init__(coins, ennemies, Area(0,0,False), Area(width-40, height-40,True), width, height)
 
+        # added stage 1 intro
         self.intro_duration = 120
         self.init_intro_duration = 120
         self.intro_bg_image = pg.image.load("images/stage1_bg.jpg")
@@ -26,7 +25,11 @@ class Level1_stage1(Level):
 
 
     def update(self, screen):
-        # returns true if it is necessary to wait
+        """
+        Returns true if it is necessary to wait and displays the intro.
+        Otherwise, returns false if the intro is complete.
+        This level have a stage 1 intro and the ready intro
+        """
         if self.intro_duration > 60:
             self.intro_duration -= 1
             screen.blit(self.intro_bg_image,(0,0))

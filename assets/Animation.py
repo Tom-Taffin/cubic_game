@@ -1,5 +1,9 @@
 import pygame as pg
 class Animation:
+    """
+    To create an animation: edit animations then while the animation is not finish, update the animation
+    """
+
     def __init__(self,name,x,y,width,height):
         self.images = []
         self.current_image = 0

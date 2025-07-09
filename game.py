@@ -9,11 +9,22 @@ from assets.Player import Player
 
 from assets.levels.Level1_stage1 import Level1_stage1
 from assets.scenes.Levels_scene import Levels_manager
+from assets.scenes.Option import Option
 
 WIDTH = 800
 HEIGHT = 600
 
 class Game:
+    """
+    To add a level: Create a LevelX_stageY class inheriting from Level or Level_Boss and define the different enemies, rooms, intro...
+                    In Game_logic, edit manually self.levels.
+                    In Levels_scene, edit _initialize_stages directly in the Stage_manager class.
+    
+    To add a scene: Create a scene class inheriting from Scene or Animate_scene and define the buttons.
+                    In Scene_manager, edit manually self.scene_classes and self.scene_button_handlers.
+                                      Then check that there is no specialization in the methods.
+                    Create the button_handler methods in game and Game_logic.
+    """
 
     def __init__(self):
         self.screen_manager = Screen_manager(WIDTH,HEIGHT)
@@ -26,7 +37,6 @@ class Game:
         self.score = 0
     
     # apprentissage supervisé
-
 
     def state(self):
         """return the state vector with the coordinates of the player, coins, enemies and exit"""
@@ -142,10 +152,11 @@ class Game:
     # ------------------------------------------ play methods ----------------------------------------------------
 
     def play_one_image(self):
+        """Update the display during the game and manage victory and defeat"""
         if not self.game_logic.update_level(): # update_level return True if it is necessary to wait
             self.screen_manager.clear_screen()
             self.game_logic.update_area()
-            game_over = self.game_logic.update_timer()
+            game_over = self.game_logic.update_timer_and_defeat()
             if game_over:
                 self.game_over()
             self.game_logic.update_player()
@@ -153,16 +164,18 @@ class Game:
             game_over = self.game_logic.update_ennemies_and_defeat()
             if game_over:
                 self.game_over()
-            self.update_win()
+            if self.game_logic.is_win():
+                self.win()
 
     def game_over(self):
+        """Setup during defeat."""
         self.game_logic.game_over()
         self.scene_manager.change_scene("game_over")
 
-    def update_win(self):
-        if self.game_logic.is_win():
-            self.game_logic.win()
-            self.scene_manager.change_scene("win")
+    def win(self):
+        """Setup during victory."""
+        self.game_logic.win()
+        self.scene_manager.change_scene("win")
     
     # ------------------------------------------ button behavior ----------------------------------------------------
 
@@ -180,9 +193,7 @@ class Game:
 
     def handle_start_button(self, i = 0):
         self.game_logic.handle_start_button(i)
-        self.handle_play_button()
-        self.game_logic.level.restore_intro_duration()
-        self.game_logic.intro_duration = self.game_logic.level.init_intro_duration
+        self.scene_manager.change_scene("play")
 
     def handle_reset_button(self):
         self.game_logic.handle_reset_button()
@@ -200,7 +211,7 @@ class Game:
             self.scene_manager.change_scene("final_win")
         
     def handle_pause_button(self):
-        if self.game_logic.level.intro_duration == 0:
+        if self.game_logic.level.intro_duration == 0: # you have to wait until the end of the intro before pausing
             self.game_logic.handle_pause_button()
             self.scene_manager.change_scene("pause")
     
@@ -212,12 +223,12 @@ class Game:
         self.game_logic.handle_option_button()
         self.scene_manager.change_scene("option")
     
-    def handle_sounds_button(self, scene):
+    def handle_sounds_button(self, scene: Option):
         self.game_logic.handle_sounds_button()
-        scene.sounds = self.game_logic.sounds_enabled
+        scene.sounds_enabled = self.game_logic.sounds_enabled
         scene.update_sound_button()
 
-    def handle_reset_records_button(self, scene):
+    def handle_reset_records_button(self, scene: Option):
         self.game_logic.handle_reset_records_button()
         scene.click_reset_button()
 

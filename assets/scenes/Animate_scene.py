@@ -2,6 +2,7 @@ import pygame as pg
 from assets.scenes.Scene import Scene
 
 class Animate_scene(Scene):
+    """scene with an animated background"""
 
     def __init__(self, screen, width:int, height:int, banner_name:str, background_name:str):
         super().__init__(screen, width, height, banner_name)
@@ -10,6 +11,7 @@ class Animate_scene(Scene):
         self.tick = 0
 
     def update(self, selected_button):
+        """display the new background image for animation"""
         if self.tick == 0:
             self.tick = 2
             self.current_image = (self.current_image+1)%len(self.images)

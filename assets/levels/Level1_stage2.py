@@ -18,6 +18,7 @@ class Level1_stage2(Level):
 
         super().__init__(coins, ennemies, Area(0,0,False), Area(width-40, height-40,True), width, height)
 
+        # added stage 2 intro
         self.intro_bg_animation = Animation("circle",0,0,width,height)
         self.intro_image = pg.image.load("images/stage2.png")
         self.intro_image = pg.transform.scale(self.intro_image,(width//2, height//8))
@@ -25,7 +26,11 @@ class Level1_stage2(Level):
         self.init_intro_duration = 124
 
     def update(self, screen):
-        # returns true if it is necessary to wait
+        """
+        Returns true if it is necessary to wait and displays the intro.
+        Otherwise, returns false if the intro is complete.
+        This level have a stage 2 intro and the ready intro
+        """
         if self.intro_duration > 60:
             self.intro_duration -= 1
             self.intro_bg_animation.update(screen)

@@ -5,6 +5,9 @@ from assets.ennemies.Ennemy_snake_tail import Ennemy_snake_tail
 from assets.Entity import Entity
 
 class Ennemy_snake(Entity):
+    """
+    Boss in the form of a snake that chases the player.
+    """
     def __init__(self, x:int, y:int, speed:int, player:Player, length:int):
         head = Ennemy_ia(x,y,speed,player)
         self.ennemies = [head]

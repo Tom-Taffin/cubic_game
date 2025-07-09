@@ -5,6 +5,9 @@ from assets.Player import Player
 
 
 class Ennemy_ia(Entity):
+    """
+    Square that chases the player
+    """
     def __init__(self, x:int, y:int, speed:int, player:Player):
         super().__init__(x,y,30,30,pg.Color(255,0,0),0,0)
         self._speed = speed/10

@@ -19,10 +19,18 @@ class Level:
         self.init_intro_duration = self.intro_duration
 
     def restore(self):
+        """
+        Restore the level to start a new game.
+        All non-abstract levels that inherit from this class have an init of this form
+        """
         self.__init__(self._width,self._height)
 
     def update(self, screen):
-        # returns true if it is necessary to wait
+        """
+        Returns true if it is necessary to wait and displays the intro.
+        Otherwise, returns false if the intro is complete.
+        All levels have a basic intro Ready but you can add intros before this one by increasing the intro duration.
+        """
         wait = False
         if self.intro_duration == 60:
             screen.fill(pg.Color(0,0,0))
@@ -33,4 +41,9 @@ class Level:
         return wait
     
     def restore_intro_duration(self):
+        """Restore all intros."""
         self.intro_duration = self.init_intro_duration
+
+    def restore_ready_intro(self):
+        """restore only the "Ready" intro"""
+        self.intro_duration = 60

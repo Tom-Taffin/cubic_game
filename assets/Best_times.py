@@ -2,6 +2,7 @@ import json
 import os
 
 class Best_times:
+    """saves the best times of each level"""
     def __init__(self, levels):
         self.levels = levels
         self.best_times_file = "best_times.json"

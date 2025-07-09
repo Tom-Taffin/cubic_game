@@ -3,6 +3,7 @@ import pygame as pg
 
 
 class Entity(Element):
+    """Element that moves"""
     def __init__(self, x:int, y:int, width:int, height:int, color:pg.Color, deltaX:int, deltaY:int):
         super().__init__(x,y,width,height,color)
         self._deltaX = deltaX

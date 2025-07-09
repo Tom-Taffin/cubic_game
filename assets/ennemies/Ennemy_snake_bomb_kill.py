@@ -5,6 +5,13 @@ from assets.ennemies.Ennemy_static import Ennemy_static
 
 
 class Ennemy_snake_bomb_kill(Ennemy_snake_can_die):
+
+    """
+    Snake that dies when it touches a bomb.
+    A bomb can be a static enemy or something else.
+    All Enemy_snake_bomb_kill must have the same bomb list.
+    """
+
     def __init__(self, x:int, y:int, speed:int, player:Player, length:int, bombs:list[Ennemy_static]):
         super().__init__(x,y,speed,player,length)
         self.bombs = bombs

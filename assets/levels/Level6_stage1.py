@@ -14,6 +14,12 @@ class Level6_stage1(Level_Boss):
         super().__init__(coins, ennemies, width, height, player)
 
     def update(self, screen):
+        """
+        Makes the exit appear if all the boss is dead.
+        Returns true if it is necessary to wait and displays the intro.
+        Otherwise, returns false if the intro is complete.
+        This levels have a basic boss intro and the ready intro but you can add intros before by increasing the intro duration.
+        """
         wait = super().update(screen)
         if wait:
             return wait

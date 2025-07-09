@@ -2,7 +2,9 @@ from assets.ennemies.Ennemy_laser import Ennemy_laser
 import pygame as pg
 
 class Ennemy_laser_pulsation(Ennemy_laser):
-
+    """
+    Laser that turns on and off.
+    """
     def __init__(self, x1:int, y1:int, x2:int, y2:int, width:int = 3, on_duration: int = 60, off_duration: int = 60, launch_duration = 0):
         super().__init__(x1, y1, x2, y2, width)
         self.on_duration = on_duration

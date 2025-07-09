@@ -2,6 +2,16 @@ from assets.scenes.Animate_scene import Animate_scene
 from dataclasses import dataclass
 from typing import List, Dict
 
+"""
+To manually edit stage scenes: edit _initialize_stages directly in the Stage_manager class.
+
+To dynamically change stage scenes: use add_new_stage and add_level_to_existing_stage of the Levels_manager class.
+
+To get the scene of stage number x: use update_scene(x) of the Levels_manager class.
+
+To get the button handlers for the current scene: use get_buttons_action of the Levels_manager class.
+"""
+
 @dataclass
 class Stage_config:
     name: str
@@ -10,6 +20,7 @@ class Stage_config:
     levels: List[str]
 
 class Stage_manager:
+    """configure each stage scene"""
     
     def __init__(self):
         self.stages = self._initialize_stages()
@@ -50,7 +61,6 @@ class Stage_manager:
         return len(self.stages)
     
     def get_levels_for_stage(self, stage_number: int) -> List[str]:
-        """Récupère les niveaux d'une page spécifique d'un stage"""
         if stage_number not in self.stages:
             return []
         
@@ -59,6 +69,7 @@ class Stage_manager:
 
 
 class Levels_scene(Animate_scene):
+    """dynamically create a stage scene"""
     
     def __init__(self, screen, stage_manager: Stage_manager, stage_number: int):
         self.stage_manager = stage_manager
@@ -116,6 +127,7 @@ class Levels_scene(Animate_scene):
 
 
 class Levels_manager:
+    """manage the display and behavior of stage scenes."""
     
     def __init__(self, game_instance):
         self.game = game_instance
@@ -123,6 +135,7 @@ class Levels_manager:
         self.current_scene = None
     
     def update_scene(self, stage_number: int):
+        """return the stage scene"""
         self.current_scene = Levels_scene(
             self.game.screen_manager.get_screen(), 
             self.stage_manager, 
@@ -133,6 +146,7 @@ class Levels_manager:
         return self.current_scene
     
     def get_buttons_action(self):
+        """return the button handlers for the current scene"""
         actions = self.current_scene.get_button_actions()
         res = []
         

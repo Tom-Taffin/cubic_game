@@ -9,7 +9,11 @@ from assets.scenes.Option import Option
 
 
 class Scene_manager:
-    """Centralized manager for all game scenes"""
+    """
+    Centralized manager for all game scenes
+    To manually add a scene: Edit manually self.scene_classes and self.scene_button_handlers.
+                             Then check that there is no specialization in the methods
+    """
     
     def __init__(self, game):
         self.game = game
@@ -67,7 +71,7 @@ class Scene_manager:
         if scene_name == "play":
             self.current_scene = None
         elif scene_name == "levels":
-            self.current_scene = self.game.levels_manager.update_scene(1)
+            self.current_scene = self.game.levels_manager.update_scene(1) # the stage 1 scene
         elif scene_name in self.scene_classes:
             scene_class = self.scene_classes[scene_name]
             if scene_name == "option":
@@ -78,6 +82,24 @@ class Scene_manager:
             else:
                 self.current_scene = scene_class(self.game.screen_manager.get_screen())
             self.current_scene.select_button(self.selected_button)
+    
+    def update(self):
+        """Update the display of the current scene."""
+        if self.scene_name == "play":
+            self.game.play_one_image()
+        elif self.current_scene and self.scene_name != "pause":
+            self.current_scene.update(self.selected_button)
+            
+            # Displaying scene-specific information
+            if self.scene_name in ["game_over", "win"]:
+                self.game.screen_manager.display_nb_deaths(self.game.game_logic.nb_deaths)
+                self.game.screen_manager.display_time(self.game.game_logic.time)
+                
+            if self.scene_name == "win":
+                self.game.screen_manager.display_best_time(
+                    self.game.game_logic.best_times.get_best_time(self.game.game_logic.current_level_index),
+                    self.game.game_logic.has_new_record
+                )
     
     def handle_events(self, event):
         """Handles events for the current scene"""
@@ -141,21 +163,3 @@ class Scene_manager:
             return self.game.levels_manager.get_buttons_action()
         else:
             return self.scene_button_handlers.get(self.scene_name, [])
-    
-    def update(self):
-        """Updates the current scene"""
-        if self.scene_name == "play":
-            self.game.play_one_image()
-        elif self.current_scene and self.scene_name != "pause":
-            self.current_scene.update(self.selected_button)
-            
-            # Displaying scene-specific information
-            if self.scene_name in ["game_over", "win"]:
-                self.game.screen_manager.display_nb_deaths(self.game.game_logic.nb_deaths)
-                self.game.screen_manager.display_time(self.game.game_logic.time)
-                
-            if self.scene_name == "win":
-                self.game.screen_manager.display_best_time(
-                    self.game.game_logic.best_times.get_best_time(self.game.game_logic.current_level_index),
-                    self.game.game_logic.has_new_record
-                )
