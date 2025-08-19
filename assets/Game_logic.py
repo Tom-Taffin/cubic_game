@@ -19,6 +19,7 @@ from assets.levels.Level2_stage3 import Level2_stage3
 from assets.levels.Level3_stage3 import Level3_stage3
 from assets.levels.Level4_stage3 import Level4_stage3
 from assets.levels.Level5_stage3 import Level5_stage3
+from assets.levels.Level_labyrinth import Level_labyrinth
 
 class Game_logic:
 
@@ -30,7 +31,7 @@ class Game_logic:
         WIDTH = screen_manager.width
         HEIGHT = screen_manager.height
         self.player = Player(0,0)
-        self.levels = [Level1_stage1(WIDTH,HEIGHT),Level2_stage1(WIDTH,HEIGHT),Level3_stage1(WIDTH,HEIGHT),Level4_stage1(WIDTH,HEIGHT),Level5_stage1(WIDTH,HEIGHT),Level6_stage1(WIDTH,HEIGHT,self.player),
+        self.levels = [Level_labyrinth(WIDTH,HEIGHT, self.player),Level2_stage1(WIDTH,HEIGHT),Level3_stage1(WIDTH,HEIGHT),Level4_stage1(WIDTH,HEIGHT),Level5_stage1(WIDTH,HEIGHT),Level6_stage1(WIDTH,HEIGHT,self.player),
                        Level1_stage2(WIDTH,HEIGHT),Level2_stage2(WIDTH,HEIGHT),Level3_stage2(WIDTH,HEIGHT),Level4_stage2(WIDTH,HEIGHT),Level5_stage2(WIDTH,HEIGHT,self.player),
                        Level1_stage3(WIDTH,HEIGHT),Level2_stage3(WIDTH,HEIGHT),Level3_stage3(WIDTH,HEIGHT,self.player),Level4_stage3(WIDTH,HEIGHT),Level5_stage3(WIDTH,HEIGHT,self.player)
                        ]
@@ -121,6 +122,12 @@ class Game_logic:
         Otherwise, returns false if the intro is complete.
         """
         return self.level.update(self.screen_manager.get_screen())
+    
+    def draw_level(self):
+        """
+        Draw the necessary elements at the level
+        """
+        return self.level.draw(self.screen_manager.get_screen())
 
     def restore_game(self):
         """Restore the level to start a new game."""

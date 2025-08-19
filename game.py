@@ -162,6 +162,7 @@ class Game:
             self.game_logic.update_player()
             self.game_logic.update_coins()
             game_over = self.game_logic.update_ennemies_and_defeat()
+            self.game_logic.draw_level()
             if game_over:
                 self.game_over()
             if self.game_logic.is_win():

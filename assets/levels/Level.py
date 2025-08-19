@@ -47,3 +47,7 @@ class Level:
     def restore_ready_intro(self):
         """restore only the "Ready" intro"""
         self.intro_duration = 60
+
+    def draw(self, screen):
+        """Draw the necessary elements at the level """
+        pass
