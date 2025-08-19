@@ -119,7 +119,7 @@ class Scene_manager:
         button_index = -1
         
         # Mouse click management
-        if event.type == pg.MOUSEBUTTONDOWN:
+        if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
             button_index = self.current_scene.has_click_on_button(event.pos)
         
         # Keyboard management
