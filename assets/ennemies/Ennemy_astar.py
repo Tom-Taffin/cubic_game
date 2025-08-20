@@ -19,7 +19,7 @@ class Ennemy_astar(Entity):
         self.calculate_path()
     
     def move(self, board_width:int, board_height:int):
-        if self.tick == 0:
+        if self.tick == 0 or not self.path or len(self.path) == 1:
             self.calculate_path()
             self.tick = 60
         self.tick-=1
