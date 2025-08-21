@@ -22,6 +22,9 @@ from assets.levels.Level4_stage3 import Level4_stage3
 from assets.levels.Level5_stage3 import Level5_stage3
 from assets.levels.Level1_stage4 import Level1_stage4
 from assets.levels.Level2_stage4 import Level2_stage4
+from assets.levels.Level3_stage4 import Level3_stage4
+from assets.levels.Level4_stage4 import Level4_stage4
+from assets.levels.Level5_stage4 import Level5_stage4
 
 class Game_logic:
 
@@ -33,9 +36,10 @@ class Game_logic:
         WIDTH = screen_manager.width
         HEIGHT = screen_manager.height
         self.player = Player(0,0)
-        self.levels = [Level2_stage4(WIDTH,HEIGHT, self.player),Level2_stage1(WIDTH,HEIGHT),Level3_stage1(WIDTH,HEIGHT),Level4_stage1(WIDTH,HEIGHT),Level5_stage1(WIDTH,HEIGHT),Level6_stage1(WIDTH,HEIGHT,self.player),
+        self.levels = [Level1_stage1(WIDTH,HEIGHT),Level2_stage1(WIDTH,HEIGHT),Level3_stage1(WIDTH,HEIGHT),Level4_stage1(WIDTH,HEIGHT),Level5_stage1(WIDTH,HEIGHT),Level6_stage1(WIDTH,HEIGHT,self.player),
                        Level1_stage2(WIDTH,HEIGHT),Level2_stage2(WIDTH,HEIGHT),Level3_stage2(WIDTH,HEIGHT),Level4_stage2(WIDTH,HEIGHT),Level5_stage2(WIDTH,HEIGHT,self.player),
-                       Level1_stage3(WIDTH,HEIGHT),Level2_stage3(WIDTH,HEIGHT),Level3_stage3(WIDTH,HEIGHT,self.player),Level4_stage3(WIDTH,HEIGHT),Level5_stage3(WIDTH,HEIGHT,self.player)
+                       Level1_stage3(WIDTH,HEIGHT),Level2_stage3(WIDTH,HEIGHT),Level3_stage3(WIDTH,HEIGHT,self.player),Level4_stage3(WIDTH,HEIGHT),Level5_stage3(WIDTH,HEIGHT,self.player),
+                       Level1_stage4(WIDTH,HEIGHT,self.player),Level2_stage4(WIDTH,HEIGHT,self.player),Level3_stage4(WIDTH,HEIGHT,self.player),Level4_stage4(WIDTH,HEIGHT,self.player),Level5_stage4(WIDTH,HEIGHT,self.player)
                        ]
         self.screen_manager = screen_manager
         self.sound_manager = sound_manager
@@ -143,7 +147,7 @@ class Game_logic:
         self.sound_manager.play_menu_sound(self.sounds_enabled)
 
     def handle_levels_button(self):
-        self.sound_manager.play_menu_sound(self.sounds_enabled)
+        pass
 
     def handle_play_button(self):
         self.sound_manager.stop_all_sounds()
@@ -174,7 +178,6 @@ class Game_logic:
     def handle_pause_button(self):
         self.sound_manager.play_menu_sound(self.sounds_enabled)
         self.time_start = time() - self.time_start - 1
-        self.selected_button = 0
         self.screen_manager.display_background("pause_bg.jpg", (1200,600), (-203,0))
     
     def handle_continue_button(self):
@@ -197,5 +200,8 @@ class Game_logic:
     
     def handle_reset_records_button(self):
         self.best_times.reset()
+
+    def handle_info_labyrinth_button(self):
+        self.screen_manager.clear_screen()
 
 

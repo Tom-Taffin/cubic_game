@@ -1,4 +1,5 @@
 import pygame as pg
+from assets.scenes.Info_labyrinth import Info_labyrinth
 from assets.scenes.Menu import Menu
 from assets.scenes.Game_over import Game_over
 from assets.scenes.Win import Win
@@ -28,7 +29,8 @@ class Scene_manager:
             "win": Win,
             "final_win": Final_win,
             "pause": Pause,
-            "option": Option
+            "option": Option,
+            "info_labyrinth": Info_labyrinth
         }
         
         # Mapping button actions for each scene
@@ -60,6 +62,9 @@ class Scene_manager:
                 lambda: self.game.handle_sounds_button(self.current_scene),
                 lambda: self.game.handle_reset_records_button(self.current_scene),
                 self.game.handle_menu_button
+            ],
+            "info_labyrinth": [
+                self.game.handle_quite_info_labyrinth_button
             ]
         }
     
@@ -87,7 +92,7 @@ class Scene_manager:
         """Update the display of the current scene."""
         if self.scene_name == "play":
             self.game.play_one_image()
-        elif self.current_scene and self.scene_name != "pause":
+        elif self.current_scene and self.scene_name not in ["pause","info_labyrinth"]:
             self.current_scene.update(self.selected_button)
             
             # Displaying scene-specific information

@@ -44,6 +44,12 @@ class Stage_manager:
                 banner_image="images/stage3.png", 
                 background_animation="main_background",
                 levels=["level1.jpg", "level2.jpg", "level3.jpg", "level4.jpg", "level5.jpg"]
+            ),
+            4: Stage_config(
+                name="Stage 4",
+                banner_image="images/stage4.png", 
+                background_animation="labyrinth_background",
+                levels=["level1.jpg", "level2.jpg", "level3.jpg", "level4.jpg", "level5.jpg"]
             )
         }
     
@@ -98,6 +104,9 @@ class Levels_scene(Animate_scene):
     
     def _add_navigation_buttons(self):
         
+        if self.stage_number == 4:
+            self.add_button("images/info.jpg")
+
         if self.stage_number > 1:
             self.add_button("images/back.jpg")
         
@@ -116,6 +125,9 @@ class Levels_scene(Animate_scene):
 
             actions.append(f"level_{start_index+i}")
         
+        if self.stage_number == 4:
+            actions.append("info_labyrinth")
+
         if self.stage_number > 1:
             actions.append("back")
         if self.stage_number < self.stage_manager.get_total_stages():
@@ -163,6 +175,9 @@ class Levels_manager:
             
             elif action == "menu":
                 res.append(self.game.handle_menu_button)
+            
+            elif action == "info_labyrinth":
+                res.append(self.game.handle_info_labyrinth_button)
         
         return res
     

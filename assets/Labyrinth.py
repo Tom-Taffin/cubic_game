@@ -16,8 +16,12 @@ class Labyrinth:
         self.map = map
         self.player = player
         self.walls = self._get_walls()
+        self.wall_image = pg.image.load("images/wall.jpg")
+        self.wall_image = pg.transform.scale(self.wall_image,(40, 30))
+
 
     def _get_walls(self) -> list[pg.Rect]:
+        """Return the list of rectangles associated with the walls"""
         walls = []
         for i in range(len(self.map)):
             if self.map[i] == 1:
@@ -25,8 +29,9 @@ class Labyrinth:
         return walls    
     
     def draw(self, screen : pg.display):
+        """Display the labyrinth and prevent the player from going through walls."""
         for wall in self.walls:
-            pg.draw.rect(screen,pg.Color(160,160,160),wall)
+            screen.blit(self.wall_image,wall)
 
         self.player._rect.y -= self.player._deltaY
         for wall in self.walls:

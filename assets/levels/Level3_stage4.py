@@ -5,7 +5,7 @@ from assets.ennemies.Ennemy_astar_patrol import Ennemy_astar_patrol
 from assets.levels.Level_labyrinth import Level_labyrinth
 
 
-class Level2_stage4(Level_labyrinth):
+class Level3_stage4(Level_labyrinth):
 
     def __init__(self, width:int, height:int, player:Player):
 
@@ -33,7 +33,8 @@ class Level2_stage4(Level_labyrinth):
         ]
 
         enemy1 = Ennemy_astar(width//2, height//2,40,player,map)
-        enemy2 = Ennemy_astar_blocker(width//2, height//2,40,player,map)
-        enemies = [enemy1, enemy2]
+        enemy2 = Ennemy_astar_patrol(width//2, height//2,30,player,map,(1,1),(19,19))
+        enemy3 = Ennemy_astar_patrol(width//2, height//2,30,player,map,(1,17),(19,1))
+        enemies = [enemy1, enemy2, enemy3]
         super().__init__(enemies, width, height, player, map)
 

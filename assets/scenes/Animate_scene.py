@@ -37,6 +37,7 @@ def load_animation_images(background_name, nb_images):
 animations = {
     "main_background":load_animation_images("main_background",112),
     "main2_background":load_animation_images("main2_background",11),
-    "main3_background":load_animation_images("main3_background",19)
+    "main3_background":load_animation_images("main3_background",19),
+    "labyrinth_background":load_animation_images("labyrinth_background",41)
 }
 animations["main3_background"] += animations["main3_background"][::-1]

@@ -16,7 +16,7 @@ HEIGHT = 600
 
 class Game:
     """
-    To add a level: Create a LevelX_stageY class inheriting from Level or Level_Boss and define the different enemies, rooms, intro...
+    To add a level: Create a LevelX_stageY class inheriting from Level or Level_Boss or Level_labyrinth and define the different enemies, rooms, intro...
                     In Game_logic, edit manually self.levels.
                     In Levels_scene, edit _initialize_stages directly in the Stage_manager class.
     
@@ -238,6 +238,14 @@ class Game:
     
     def handle_back_stage_button(self, current_stage_number):
         self.scene_manager.current_scene = self.levels_manager.update_scene(current_stage_number-1)
+
+    def handle_info_labyrinth_button(self):
+        self.game_logic.handle_info_labyrinth_button()
+        self.scene_manager.change_scene("info_labyrinth")
+
+    def handle_quite_info_labyrinth_button(self):
+        self.handle_levels_button()
+        self.handle_next_stage_button(3)
 
 if __name__ == '__main__':
     game = Game()
