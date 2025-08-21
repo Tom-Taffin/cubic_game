@@ -22,6 +22,6 @@ class Ennemy_astar_patrol(Ennemy_astar):
             self.goal_is_point_b = False
         goal = self.point_b if self.goal_is_point_b else self.point_a
         player_tile = (self.player.get_x()//40,self.player.get_y()//30)
-        if abs(player_tile[0]-start[0]) + abs(player_tile[0]-start[0]) <= 6:
+        if abs(player_tile[0]-start[0]) + abs(player_tile[1]-start[1]) <= 6:
             goal = player_tile
         self.path = super().astar_search(start, goal)

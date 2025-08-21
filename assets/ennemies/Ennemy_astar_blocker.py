@@ -4,16 +4,15 @@ import pygame as pg
 
 class Ennemy_astar_blocker(Ennemy_astar):
     """
-    Ennemi style Pac-Man qui donne l'impression de bloquer sans calculs complexes.
-    Il anticipe juste où va le joueur au lieu de calculer une position précise.
+    Enemy that tries to anticipate where the player is going.
     """
     def __init__(self, x: int, y: int, speed: int, player: Player, map: list[int]):
         self.last_player_pos = (0, 0)
         super().__init__(x, y, speed, player, map)
-        self._color = pg.Color(255, 165, 0)
+        self._color = pg.Color(227, 71, 11)
         
     def calculate_path(self):
-        """Calcule le chemin vers où le joueur semble aller"""
+        """Calculate the path"""
         start = (self.get_x()//40, self.get_y()//30)
         current_player_pos = (self.player.get_x()//40, self.player.get_y()//30)
         
@@ -24,7 +23,7 @@ class Ennemy_astar_blocker(Ennemy_astar):
         self.path = super().astar_search(start, target)
     
     def predict_player_movement(self, current_pos):
-        """Prédit où va le joueur de manière simple"""
+        """Predict where the player is going"""
         px, py = current_pos
         last_px, last_py = self.last_player_pos
         
