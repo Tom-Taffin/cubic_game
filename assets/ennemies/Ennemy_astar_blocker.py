@@ -1,3 +1,4 @@
+from assets.Labyrinth import Labyrinth
 from assets.ennemies.Ennemy_astar import Ennemy_astar
 from assets.Player import Player
 import pygame as pg
@@ -6,9 +7,9 @@ class Ennemy_astar_blocker(Ennemy_astar):
     """
     Enemy that tries to anticipate where the player is going.
     """
-    def __init__(self, x: int, y: int, speed: int, player: Player, map: list[int]):
+    def __init__(self, x: int, y: int, speed: int, labyrinth:Labyrinth):
         self.last_player_pos = (0, 0)
-        super().__init__(x, y, speed, player, map)
+        super().__init__(x, y, speed, labyrinth)
         self._color = pg.Color(227, 71, 11)
         
     def calculate_path(self):
@@ -41,14 +42,14 @@ class Ennemy_astar_blocker(Ennemy_astar):
         predicted_x = max(0, min(19, predicted_x))
         predicted_y = max(0, min(19, predicted_y))
         
-        if self.map[predicted_y * 20 + predicted_x] != 0:
+        if self.labyrinth.map[predicted_y * 20 + predicted_x] != 0:
             predicted_x = px + move_x
             predicted_y = py + move_y
             
             predicted_x = max(0, min(19, predicted_x))
             predicted_y = max(0, min(19, predicted_y))
 
-            if self.map[predicted_y * 20 + predicted_x] != 0:
+            if self.labyrinth.map[predicted_y * 20 + predicted_x] != 0:
                 return current_pos
         
         return (predicted_x, predicted_y)

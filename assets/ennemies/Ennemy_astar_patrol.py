@@ -1,3 +1,4 @@
+from assets.Labyrinth import Labyrinth
 from assets.ennemies.Ennemy_astar import Ennemy_astar
 from assets.Player import Player
 import pygame as pg
@@ -6,11 +7,11 @@ class Ennemy_astar_patrol(Ennemy_astar):
     """
     Enemy that patrols between two tiles and chases the player if he is close
     """
-    def __init__(self, x:int, y:int, speed:int, player:Player, map:list[int], point_a:tuple[int], point_b:tuple[int]):
+    def __init__(self, x:int, y:int, speed:int, labyrinth:Labyrinth, point_a:tuple[int], point_b:tuple[int]):
         self.goal_is_point_b = False
         self.point_a = point_a
         self.point_b = point_b
-        super().__init__(x,y,speed,player,map)
+        super().__init__(x,y,speed,labyrinth)
         self._color = pg.Color(245, 39, 121)
 
     def calculate_path(self):

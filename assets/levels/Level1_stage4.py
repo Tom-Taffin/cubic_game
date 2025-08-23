@@ -1,4 +1,5 @@
 import pygame as pg
+from assets.Labyrinth import Labyrinth
 from assets.Player import Player
 from assets.ennemies.Ennemy_astar import Ennemy_astar
 from assets.levels.Level_labyrinth import Level_labyrinth
@@ -29,9 +30,10 @@ class Level1_stage4(Level_labyrinth):
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
             1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0
         ]
-
-        enemies = [Ennemy_astar(width//2, height//2,40,player,map)]
-        super().__init__(enemies, width, height, player, map)
+        
+        labyrinth = Labyrinth(map,player)
+        enemies = [Ennemy_astar(width//2, height//2,40,labyrinth)]
+        super().__init__(enemies, width, height, labyrinth)
 
         # added stage 4 intro
         self.intro_duration = 120

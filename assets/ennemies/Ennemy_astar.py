@@ -1,6 +1,8 @@
 import pygame as pg
 
 from assets.Entity import Entity
+from assets.Labyrinth import Labyrinth
+from assets.Moving_labyrinth import Moving_labyrinth
 from assets.Player import Player
 
 import heapq
@@ -10,11 +12,11 @@ class Ennemy_astar(Entity):
     """
     Ennemy who hunts the player thanks to Astar
     """
-    def __init__(self, x:int, y:int, speed:int, player:Player, map:list[int]):
+    def __init__(self, x:int, y:int, speed:int, labyrinth:Labyrinth):
         super().__init__(x,y,30,30,pg.Color(255,0,0),0,0)
         self.speed = speed/10
-        self.player = player
-        self.map = map
+        self.player = labyrinth.player
+        self.labyrinth = labyrinth
         self.tick = 60
         self.calculate_path()
     
@@ -69,8 +71,12 @@ class Ennemy_astar(Entity):
             results = []
             for nx, ny in possible_moves:
                 if 0 <= nx < width and 0 <= ny < height:
-                    if self.map[ny * width + nx] == 0:
-                        results.append((nx, ny))
+                    index = ny * width + nx
+                    if self.labyrinth.map[index] != 1:
+                        if self.labyrinth.map[index] == 0 :
+                            results.append((nx, ny))
+                        elif self.labyrinth.first_plan and self.labyrinth.map[ny * width + nx] == 3 or not self.labyrinth.first_plan and self.labyrinth.map[ny * width + nx] == 2:
+                            results.append((nx, ny))
             return results
 
         open_set = []

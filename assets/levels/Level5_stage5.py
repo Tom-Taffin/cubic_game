@@ -1,43 +1,42 @@
+import pygame as pg
+from assets.Moving_labyrinth import Moving_labyrinth
 from assets.Player import Player
-from assets.ennemies.Ennemy_astar_blocker import Ennemy_astar_blocker
 from assets.ennemies.Ennemy_astar import Ennemy_astar
+from assets.ennemies.Ennemy_astar_blocker import Ennemy_astar_blocker
 from assets.ennemies.Ennemy_astar_patrol import Ennemy_astar_patrol
 from assets.levels.Level_labyrinth import Level_labyrinth
-from assets.Labyrinth import Labyrinth
 
 
-class Level5_stage4(Level_labyrinth):
+class Level5_stage5(Level_labyrinth):
 
     def __init__(self, width:int, height:int, player:Player):
-
+        
         map = [
             1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
             1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,
             1,0,1,1,1,0,1,0,1,1,1,0,1,0,1,1,1,0,1,0,
-            1,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,
+            1,0,1,0,0,0,0,0,0,1,0,0,2,0,0,0,1,0,0,0,
             1,0,1,0,1,1,1,1,0,1,0,1,1,1,1,0,1,1,0,1,
             1,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,1,
-            1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,1,
-            1,0,1,0,1,1,0,0,0,0,1,1,0,0,0,1,1,0,0,1,
+            1,0,1,3,1,1,0,1,1,1,1,1,0,1,1,1,1,3,1,1,
+            1,0,1,0,1,1,0,3,0,0,1,1,0,0,0,1,1,0,0,1,
             1,0,1,0,1,1,1,1,1,0,1,1,1,1,0,1,1,1,0,1,
-            1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,
+            1,0,2,0,1,0,0,0,1,0,0,0,0,0,0,0,0,2,0,1,
             1,1,1,0,1,0,1,0,1,0,0,0,1,0,1,1,0,1,0,1,
             1,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,0,1,0,1,
             1,0,1,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,0,1,
-            1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,
-            1,1,1,0,1,1,1,1,0,1,0,1,1,1,1,0,1,1,1,1,
+            1,0,0,0,1,0,0,0,0,1,0,0,0,0,2,0,0,3,0,1,
+            1,1,1,3,1,1,1,1,0,1,0,1,1,1,1,0,1,1,1,1,
             1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,
-            1,0,1,1,1,1,0,1,1,1,1,1,0,1,0,1,1,1,0,1,
+            1,0,1,1,1,1,0,1,1,1,1,1,0,1,2,1,1,1,3,1,
             1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,
-            1,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,0,0,1,1,
+            1,1,1,1,0,1,2,1,1,1,1,1,0,1,0,1,0,0,1,1,
             1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,1,1,0,0,0
         ]
 
-        labyrinth = Labyrinth(map,player)
-        enemy1 = Ennemy_astar(width//2, height//2,30,labyrinth)
-        enemy2 = Ennemy_astar_patrol(width//2, height//2,25,labyrinth,(1,1),(19,19))
-        enemy3 = Ennemy_astar_patrol(width//2, height//2,25,labyrinth,(1,17),(19,1))
-        enemy4 = Ennemy_astar_blocker(width//2, height//2,30,labyrinth)
-        enemies = [enemy1, enemy2, enemy3, enemy4]
+        labyrinth = Moving_labyrinth(map,player)
+        enemy1 = Ennemy_astar(width//2, height//2,35,labyrinth)
+        enemy2 = Ennemy_astar_blocker(width//2, height//2,35,labyrinth)
+        enemies = [enemy1, enemy2]
         super().__init__(enemies, width, height, labyrinth)
 

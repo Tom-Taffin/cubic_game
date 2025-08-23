@@ -25,6 +25,11 @@ from assets.levels.Level2_stage4 import Level2_stage4
 from assets.levels.Level3_stage4 import Level3_stage4
 from assets.levels.Level4_stage4 import Level4_stage4
 from assets.levels.Level5_stage4 import Level5_stage4
+from assets.levels.Level1_stage5 import Level1_stage5
+from assets.levels.Level2_stage5 import Level2_stage5
+from assets.levels.Level3_stage5 import Level3_stage5
+from assets.levels.Level4_stage5 import Level4_stage5
+from assets.levels.Level5_stage5 import Level5_stage5
 
 class Game_logic:
 
@@ -39,7 +44,8 @@ class Game_logic:
         self.levels = [Level1_stage1(WIDTH,HEIGHT),Level2_stage1(WIDTH,HEIGHT),Level3_stage1(WIDTH,HEIGHT),Level4_stage1(WIDTH,HEIGHT),Level5_stage1(WIDTH,HEIGHT),Level6_stage1(WIDTH,HEIGHT,self.player),
                        Level1_stage2(WIDTH,HEIGHT),Level2_stage2(WIDTH,HEIGHT),Level3_stage2(WIDTH,HEIGHT),Level4_stage2(WIDTH,HEIGHT),Level5_stage2(WIDTH,HEIGHT,self.player),
                        Level1_stage3(WIDTH,HEIGHT),Level2_stage3(WIDTH,HEIGHT),Level3_stage3(WIDTH,HEIGHT,self.player),Level4_stage3(WIDTH,HEIGHT),Level5_stage3(WIDTH,HEIGHT,self.player),
-                       Level1_stage4(WIDTH,HEIGHT,self.player),Level2_stage4(WIDTH,HEIGHT,self.player),Level3_stage4(WIDTH,HEIGHT,self.player),Level4_stage4(WIDTH,HEIGHT,self.player),Level5_stage4(WIDTH,HEIGHT,self.player)
+                       Level1_stage4(WIDTH,HEIGHT,self.player),Level2_stage4(WIDTH,HEIGHT,self.player),Level3_stage4(WIDTH,HEIGHT,self.player),Level4_stage4(WIDTH,HEIGHT,self.player),Level5_stage4(WIDTH,HEIGHT,self.player),
+                       Level1_stage5(WIDTH,HEIGHT,self.player),Level2_stage5(WIDTH,HEIGHT,self.player),Level3_stage5(WIDTH,HEIGHT,self.player),Level4_stage5(WIDTH,HEIGHT,self.player),Level5_stage5(WIDTH,HEIGHT,self.player)
                        ]
         self.screen_manager = screen_manager
         self.sound_manager = sound_manager

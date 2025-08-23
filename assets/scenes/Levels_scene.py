@@ -50,6 +50,12 @@ class Stage_manager:
                 banner_image="images/stage4.png", 
                 background_animation="labyrinth_background",
                 levels=["level1.jpg", "level2.jpg", "level3.jpg", "level4.jpg", "level5.jpg"]
+            ),
+            5: Stage_config(
+                name="Stage 5",
+                banner_image="images/stage5.png", 
+                background_animation="labyrinth_background",
+                levels=["level1.jpg", "level2.jpg", "level3.jpg", "level4.jpg", "level5.jpg"]
             )
         }
     
