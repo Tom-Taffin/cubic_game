@@ -50,7 +50,7 @@ class Ennemy_astar(Entity):
     def calculate_path(self):
         """Calculate the path"""
         start =  (self.get_x()//40, self.get_y()//30)
-        goal = (self.player.get_x()//40, self.player.get_y()//30)
+        goal = (self.player._rect.centerx//40, self.player._rect.centery//30)
         self.path = self.astar_search(start, goal)
 
     def astar_search(self, start, goal, width=20, height=20):
