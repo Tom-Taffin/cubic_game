@@ -10,6 +10,8 @@ Projet personnel visant à expérimenter les bases du développement de jeu avec
 ![Aperçu d'un niveau du stage 2](demo/demo_stage2.gif)
 ![Aperçu d'un niveau du stage 3](demo/demo_stage3.gif)
 ![Aperçu d'un boss](demo/demo_boss.gif)
+![Aperçu d'un niveau du stage 4](demo/demo_stage4.gif)
+![Aperçu d'un niveau du stage 5](demo/demo_stage5.gif)
 
 ## Technologies utilisées
 
@@ -43,9 +45,11 @@ python game.py
 - Animation via enchaînement d’images.
 - Gestion de la musique et des effets sonores.
 - Timer intégré et parfois affiché sous forme de bar pour gérer le temps de jeu.
+- Partitionnement de l’écran en tuiles, permettant la génération de labyrinthes dynamiques avec des murs mobiles.
+- Implémentation de l’algorithme A* pour offrir à certains ennemis une navigation stratégique et intelligente dans le labyrinthe.
+
 
 ## Améliorations futures / en cours de développement
 
 - Développement d'une **IA jouant au jeu via du Deep Q-Learning** pour expérimenter l’apprentissage par renforcement.
 - Implémentation d’un **éditeur de niveaux** accessible depuis le menu du jeu.
-- Ajout d’un algorithme **A\* (A-star)** permettant à certains ennemis de naviguer dans un labyrinthe de manière stratégique.
